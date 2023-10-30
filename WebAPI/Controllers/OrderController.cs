@@ -9,19 +9,23 @@ namespace WebAPI.Controllers
 	public class OrderController : Controller
 	{
 		private readonly OrderRepository _orderRepository;
+		private	readonly OrderProductRepository _orderProductRepository;
+		private readonly OrderServiceRepository _orderServiceRepository;
 
-		public OrderController(OrderRepository orderRepository)
-		{
-			_orderRepository = orderRepository;
-		}
+		public OrderController(OrderRepository orderRepository, OrderProductRepository orderProductRepository, OrderServiceRepository orderServiceRepository)
+        {
+            _orderRepository = orderRepository;
+            _orderProductRepository = orderProductRepository;
+            _orderServiceRepository = orderServiceRepository;
+        }
 
-		#region Get All Order
-		/// <summary>
-		/// Get all product
-		/// </summary>
-		/// <returns></returns>
-		[HttpGet]
-		[Route("Get All Order")]
+        #region Get All Order
+        /// <summary>
+        /// Get all product
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+		[Route("GetAllOrder")]
 
 		public IActionResult GetAllOrder()
 		{
@@ -54,7 +58,7 @@ namespace WebAPI.Controllers
 		/// <param name="id"></param>
 		/// <returns></returns>
 		[HttpGet]
-		[Route("Get Order by ID/{id}")]
+		[Route("GetOrderbyID/{id}")]
 		public IActionResult GetOrderByID(Guid id)
 		{
 			var order = new Order();
@@ -98,10 +102,20 @@ namespace WebAPI.Controllers
 
 		public IActionResult AddOrder([FromBody] Order order)
 		{
-			ICollection<Order> orders = new List<Order>();
 			try
 			{
-				_orderRepository.Add(order);
+				var createdOrder = _orderRepository.Add(order);
+				foreach(OrderProduct product in order.Products)
+				{
+					product.OrderId = createdOrder.Id;
+					_orderProductRepository.Add(product);
+				}
+				foreach(OrderService service in order.Services)
+				{
+					service.OrderId = createdOrder.Id;
+					_orderServiceRepository.Add(service);
+				}
+
 					return new JsonResult(new
 				{
 					status = true,

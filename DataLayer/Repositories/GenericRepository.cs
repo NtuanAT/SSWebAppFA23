@@ -34,10 +34,11 @@ namespace DataLayer.Repositories
 			return _dbSet.FirstOrDefault(expression);
 		}
 
-		public void Add(T entity)
+		public T Add(T entity)
 		{
 			_dbSet.Add(entity);
 			_context.SaveChanges();
+			return entity;
 		}
 
 		public void Update(T entity)

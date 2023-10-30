@@ -17,7 +17,7 @@ public class Payment
     [Required]
     public PaymentStatus Status { get; set; }
 
-    public virtual Order Order { get; set; } = null!;
+    public virtual Order? Order { get; set; } = null!;
 
 }
 

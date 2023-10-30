@@ -73,6 +73,8 @@ namespace WebAPI
 			builder.Services.AddScoped<ImageRepository>();
 			builder.Services.AddScoped<AccountDetailRepository>();
 			builder.Services.AddScoped<PaymentRepository>();
+			builder.Services.AddScoped<OrderServiceRepository>();
+			builder.Services.AddScoped<OrderProductRepository>();
 
 			//CORS handler
 			var CORS_CONFIG = "_CORS_CONFIG";
