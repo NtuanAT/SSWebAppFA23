@@ -17,5 +17,5 @@ public partial class FeedBack
 
     public string? Picture { get; set; }
 
-    public virtual Order Order { get; set; } = null!;
+    public virtual Order? Order { get; set; } = null!;
 }

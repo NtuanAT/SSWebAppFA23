@@ -21,5 +21,5 @@ public class Image
 
     public string? Notes { get; set; }
 
-    public virtual Account Account { get; set; } 
+    public virtual Account? Account { get; set; } 
 }

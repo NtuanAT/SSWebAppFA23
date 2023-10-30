@@ -21,5 +21,5 @@ public class AccountDetail
     [Required]
     public bool Gender { get; set; }
 
-    public virtual Account Account { get; set; } 
+    public virtual Account? Account { get; set; } 
 }

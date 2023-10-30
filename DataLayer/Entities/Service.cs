@@ -13,5 +13,5 @@ public class Service
     [Required]
     public string Type { get; set; } = null!;
 
-    public virtual ICollection<OrderService> Orders { get; set; }
+    public virtual ICollection<OrderService>? Orders { get; set; }
 }
