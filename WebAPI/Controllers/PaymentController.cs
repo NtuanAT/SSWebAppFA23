@@ -52,7 +52,7 @@ namespace WebAPI.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet]
-        [Route("Get Payment by Id")]
+        [Route("GetPaymentbyId")]
         public IActionResult GetPaymentbyId(Guid id) 
         {
             var payment = new Payment();           
@@ -92,7 +92,7 @@ namespace WebAPI.Controllers
         /// <param name="payment"></param>
         /// <returns></returns>
         [HttpPost]
-        [Route("Add Payment")]
+        [Route("AddPayment")]
 
         public IActionResult AddPayment([FromBody] Payment payment) 
         {
@@ -123,7 +123,7 @@ namespace WebAPI.Controllers
         /// <param name="payment"></param>
         /// <returns></returns>
         [HttpPost]
-        [Route("Update Payment")]
+        [Route("UpdatePayment")]
         public IActionResult UpdatePayment([FromBody] Payment payment)
         {
             try 
@@ -152,7 +152,7 @@ namespace WebAPI.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpPost]
-        [Route("Delete Payment/{id}")]
+        [Route("DeletePayment/{id}")]
 
         public IActionResult DeletePayment(Guid id)
         {

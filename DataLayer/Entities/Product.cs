@@ -21,5 +21,6 @@ public class Product
     [Required]
     public double Size { get; set; }
 
+    public string? PictureLink { get; set; }
     public ICollection<OrderProduct>? Orders { get; set; }
 }
