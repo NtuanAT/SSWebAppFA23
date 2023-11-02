@@ -108,17 +108,25 @@ namespace WebAPI.Controllers
 		public TokenModel GenerateToken(Account account)
 		{
 			List<Claim> claims = new List<Claim>()
-		{
-			new Claim("AccountID", account.Id.ToString()),
-			new Claim(ClaimTypes.Role, account.Role.ToString())
-		};
+			{
+				new Claim(ClaimTypes.Name, account.Id.ToString()),
+				new Claim("AccountID", account.Id.ToString()),
+				new Claim(ClaimTypes.Role, account.Role.ToString())
+			};
+
+			var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("c2VydmVwZXJmZWN0bHljaGVlc2VxdWlja2NvYWNoY29sbGVjdHNsb3Bld2lzZWNhbWU="));
+			var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
 			var token = new JwtSecurityToken(
+				issuer: "YourIssuer",
+				audience: "YourAudience",
 				claims: claims,
-				expires: DateTime.Now.AddMinutes(10));
+				expires: DateTime.Now.AddMinutes(60),
+				signingCredentials: credentials);
 
 			var jwt = new JwtSecurityTokenHandler().WriteToken(token);
 
-			return new()
+			return new TokenModel()
 			{
 				Token = jwt,
 				Expiration = token.ValidTo.ToLocalTime(),
