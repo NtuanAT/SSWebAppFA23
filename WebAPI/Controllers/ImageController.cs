@@ -153,7 +153,7 @@ namespace WebAPI.Controllers
                 return new JsonResult(new
                 {
                     status = true,
-                    message = "Add Image success"
+                    message = ex.Message
                 });
             }
         }

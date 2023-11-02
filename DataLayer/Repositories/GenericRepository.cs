@@ -37,8 +37,11 @@ namespace DataLayer.Repositories
 		public T Add(T entity)
 		{
 			_dbSet.Add(entity);
-			_context.SaveChanges();
 			return entity;
+		}
+		public void AddRange(ICollection<T> entities)
+		{
+			_dbSet.AddRange(entities);
 		}
 
 		public void Update(T entity)
@@ -48,11 +51,23 @@ namespace DataLayer.Repositories
 			_context.SaveChanges();
 		}
 
+	
 		public void Delete(Guid id)
 		{
 			var entity = _dbSet.Find(id);
 			_dbSet.Remove(entity);
 			_context.SaveChanges();
+		}
+
+
+		public int SaveChanges()
+		{
+			return _context.SaveChanges();
+		}
+
+		public async Task SaveChangesAsync()
+		{
+			await _context.SaveChangesAsync();
 		}
 	}
 

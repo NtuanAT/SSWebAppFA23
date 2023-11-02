@@ -12,5 +12,7 @@ namespace DataLayer.Repositories
 		public OrderRepository(SswdatabaseContext context) : base(context)
 		{
 		}
+
+		
 	}
 }

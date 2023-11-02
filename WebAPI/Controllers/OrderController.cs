@@ -1,6 +1,10 @@
-﻿using DataLayer.Entities;
+﻿using DataLayer;
+using DataLayer.Entities;
 using DataLayer.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using WebAPI.ViewModel;
 
 namespace WebAPI.Controllers
 {
@@ -9,30 +13,55 @@ namespace WebAPI.Controllers
 	public class OrderController : Controller
 	{
 		private readonly OrderRepository _orderRepository;
-		private	readonly OrderProductRepository _orderProductRepository;
+		private readonly AccountRepository _accountRepository;
+		private readonly OrderProductRepository _orderProductRepository;
 		private readonly OrderServiceRepository _orderServiceRepository;
+		private readonly SswdatabaseContext _context;
 
-		public OrderController(OrderRepository orderRepository, OrderProductRepository orderProductRepository, OrderServiceRepository orderServiceRepository)
-        {
-            _orderRepository = orderRepository;
-            _orderProductRepository = orderProductRepository;
-            _orderServiceRepository = orderServiceRepository;
-        }
+		public OrderController(OrderRepository orderRepository,
+			AccountRepository accountRepository,
+		 OrderProductRepository orderProductRepository,
+		  OrderServiceRepository orderServiceRepository,
+		  SswdatabaseContext context
+		  )
+		{
+			_orderRepository = orderRepository;
+			_accountRepository = accountRepository;
+			_orderProductRepository = orderProductRepository;
+			_orderServiceRepository = orderServiceRepository;
+			_context = context;
+		}
 
-        #region Get All Order
-        /// <summary>
-        /// Get all product
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
+		#region Get All Order
+		/// <summary>
+		/// Get all product
+		/// </summary>
+		/// <returns></returns>
+		[HttpGet]
 		[Route("GetAllOrder")]
-
+		[Authorize]
 		public IActionResult GetAllOrder()
 		{
-			ICollection<Order> orders = new List<Order>();
+			var orderViews = new List<OrderViewModel>();
 			try
 			{
-				orders = _orderRepository.GetAll();
+				orderViews = _context.Orders
+				.Select(x => new OrderViewModel()
+				{
+					AccountId = x.AccountId,
+					OrderId = x.Id,
+					OrderDate = x.OrderDate,
+					Status = x.Status,
+					//AccountName= _context.Accounts.Where(y=>y.Id==x.AccountId).Select(y=>y.Username).FirstOrDefault(),
+					Products = _context.OderProducts.Where(y => y.OrderId == x.Id)
+					.Select(y => new OrderProductViewModel()
+					{
+						ProductId = y.ProductId,
+						Quantity = y.Quantity,
+					}).ToList()
+					.ToList(),
+				}).ToList();
+
 			}
 			catch (Exception ex)
 			{
@@ -46,7 +75,7 @@ namespace WebAPI.Controllers
 			{
 				status = true,
 				message = "Get all orders success",
-				data = orders
+				data = orderViews
 			});
 		}
 		#endregion
@@ -99,24 +128,43 @@ namespace WebAPI.Controllers
 		/// <returns></returns>
 		[HttpPost]
 		[Route("AddOrder")]
-
-		public IActionResult AddOrder([FromBody] Order order)
+		[Authorize]
+		public IActionResult AddOrder([FromBody] List<OrderProductViewModel> items)
 		{
 			try
 			{
-				var createdOrder = _orderRepository.Add(order);
-				foreach(OrderProduct product in order.Products)
+				var orderProducts = new List<OrderProduct>();
+				int total = 0;
+				var orderId = Guid.NewGuid();
+				foreach (var item in items)
 				{
-					product.OrderId = createdOrder.Id;
-					_orderProductRepository.Add(product);
+					orderProducts.Add(new OrderProduct
+					{
+						OrderId = orderId,
+						ProductId = item.ProductId,
+						Quantity = item.Quantity
+					});
 				}
-				foreach(OrderService service in order.Services)
+				var order = new Order
 				{
-					service.OrderId = createdOrder.Id;
-					_orderServiceRepository.Add(service);
-				}
+					Id = orderId,
+					AccountId = Guid.Parse(User.Identity.Name),
+					OrderDate = DateTime.Now,
+					Total = items.Count,
+				};
+				_orderRepository.Add(order);
+				_orderProductRepository.AddRange(orderProducts);
 
+				var result = _orderRepository.SaveChanges();
+				if (result == 0)
+				{
 					return new JsonResult(new
+					{
+						status = false,
+						message = "Add order failed"
+					});
+				}
+				return new JsonResult(new
 				{
 					status = true,
 					message = "Add order success"
@@ -157,6 +205,32 @@ namespace WebAPI.Controllers
 				});
 			}
 		}
+		[HttpPut]
+		[Route("ChangeStatus/{status}/{orderId}")]
+		public IActionResult ChangeStatus(int status, Guid orderId)
+		{
+			try
+			{
+				var order = _orderRepository.Get(x => x.Id == orderId);
+				order.Status = (OrderStatus)status;
+				_orderRepository.Update(order);
+				return new JsonResult(new
+				{
+					status = true,
+					message = "Update order success"
+				});
+			}
+			catch (Exception ex)
+			{
+				return new JsonResult(new
+				{
+					status = false,
+					message = ex.Message
+				});
+			}
+		}
+
+
 		#endregion
 
 		#region Delete Order

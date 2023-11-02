@@ -55,9 +55,15 @@ namespace WebAPI
 				option.RequireHttpsMetadata = false;
 				option.SaveToken = true;
 				option.TokenValidationParameters = new TokenValidationParameters
-				{					
+				{
+					ValidateIssuer = true,
+					ValidIssuer = "YourIssuer",
+					ValidateAudience = true,
+					ValidAudience = "YourAudience",
+					ValidateIssuerSigningKey = true,
+					IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("c2VydmVwZXJmZWN0bHljaGVlc2VxdWlja2NvYWNoY29sbGVjdHNsb3Bld2lzZWNhbWU=")),
 					ValidateLifetime = true,
-					ClockSkew = TimeSpan.Zero
+					ClockSkew = TimeSpan.Zero // Optional, allows for some time difference between the server and client.
 				};
 			});
 			// Add services to the container.

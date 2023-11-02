@@ -22,7 +22,7 @@ namespace WebAPI.Controllers
 		/// <returns></returns>
 		[HttpGet]
 		[Route("GetAllAccount")]
-		[Authorize(Roles = "Admin")]
+		 [Authorize(Roles = "Admin")]
 		public IActionResult GetAllAccount()
 		{
 			ICollection<Account> accounts = new List<Account>();
@@ -55,7 +55,7 @@ namespace WebAPI.Controllers
 		/// <returns></returns>
 		[HttpPut]
 		[Route("DeactivateAccount/{id}")]
-		[Authorize(Roles = "Admin")]
+		 [Authorize(Roles = "Admin")]
 		public IActionResult DeactivateAccount(Guid id)
 		{
 			// Check if account exist
@@ -104,7 +104,7 @@ namespace WebAPI.Controllers
 		#region ActivateAccount
 		[HttpPut]
 		[Route("ActivateAccount/{id}")]
-		[Authorize(Roles = "Admin")]
+		 [Authorize(Roles = "Admin")]
 		public IActionResult ActivateAccount(Guid id)
 		{
 			// Check if account exist
@@ -158,7 +158,7 @@ namespace WebAPI.Controllers
 		/// <returns></returns>
 		[HttpPatch]
 		[Route("UpdateAccount")]
-		[Authorize(Roles = "Admin")]
+		 [Authorize(Roles = "Admin")]
 		public IActionResult UpdateAccount([FromBody] Account account)
 		{
 			// Check if account exist
