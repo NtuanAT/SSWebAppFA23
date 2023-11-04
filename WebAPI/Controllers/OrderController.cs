@@ -52,7 +52,8 @@ namespace WebAPI.Controllers
 					OrderId = x.Id,
 					OrderDate = x.OrderDate,
 					Status = x.Status,
-					//AccountName= _context.Accounts.Where(y=>y.Id==x.AccountId).Select(y=>y.Username).FirstOrDefault(),
+					//AccountName = _context.Accounts.Where(y => y.Id == x.AccountId).Select(y => y.Username).FirstOrDefault(),
+
 					Products = _context.OderProducts.Where(y => y.OrderId == x.Id)
 					.Select(y => new OrderProductViewModel()
 					{
