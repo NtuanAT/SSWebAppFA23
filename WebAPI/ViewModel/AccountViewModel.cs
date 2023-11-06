@@ -10,9 +10,9 @@ namespace WebAPI.ViewModel
         public AccountRole Role { get; set; }
         public AccountStatus Status { get; set; }
 
-        public AccountDetail? AccountDetail { get; set; }
+        public AccountDetailVieweModel? AccountDetail { get; set; }
 
-        public ICollection<Image>? Images { get; set; }
+        public ICollection<ImageViewModel>? Images { get; set; }
 
         public ICollection<OrderViewModel>? Orders { get; set; }
     }

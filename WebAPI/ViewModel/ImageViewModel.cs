@@ -4,7 +4,7 @@ namespace WebAPI.ViewModel
 {
     public class ImageViewModel
     {
-        public Guid Id { get; set; }
+        public Guid? Id { get; set; }
         public Guid AccountId { get; set; }
         public string Drawing { get; set; }
         public string Style { get; set; }
@@ -14,6 +14,6 @@ namespace WebAPI.ViewModel
 
         public string? Notes { get; set; }
 
-        public  Account? Account { get; set; }
+        public  AccountViewModel? Account { get; set; }
     }
 }

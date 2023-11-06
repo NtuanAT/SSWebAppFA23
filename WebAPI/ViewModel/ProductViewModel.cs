@@ -4,7 +4,7 @@ namespace WebAPI.ViewModel
 {
     public class ProductViewModel
     {
-        public Guid Id { get; set; }
+        public Guid? Id { get; set; }
         public string Name { get; set; }
         public string Brand { get; set; }
 
@@ -15,6 +15,6 @@ namespace WebAPI.ViewModel
         public double Size { get; set; }
 
         public string? PictureLink { get; set; }
-        public ICollection<OrderProduct>? Orders { get; set; }
+        public ICollection<OrderProductViewModel>? Orders { get; set; }
     }
 }

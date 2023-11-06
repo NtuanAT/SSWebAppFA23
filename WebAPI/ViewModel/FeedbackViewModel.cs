@@ -4,7 +4,7 @@ namespace WebAPI.ViewModel
 {
     public class FeedbackViewModel
     {
-        public Guid Id { get; set; }
+        public Guid? Id { get; set; }
         public Guid OrderId { get; set; }
 
         public string? Comment { get; set; }
@@ -13,6 +13,6 @@ namespace WebAPI.ViewModel
 
         public string? Picture { get; set; }
 
-        public  Order? Order { get; set; } = null!;
+        public  OrderViewModel? Order { get; set; } = null!;
     }
 }
