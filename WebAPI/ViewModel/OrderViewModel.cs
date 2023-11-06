@@ -8,7 +8,7 @@ namespace WebAPI.ViewModel
 {
     public class OrderViewModel
     {
-        public Guid OrderId { get; set; }
+        public Guid? Id { get; set; }
         public Guid AccountId { get; set; }
         public DateTime OrderDate { get; set; }
         public OrderStatus? Status { get; set; }
@@ -24,14 +24,14 @@ namespace WebAPI.ViewModel
     public class OrderProductViewModel
     {
         public Guid? OrderId { get; set; }
-        public Guid ProductId { get; set; }
+        public Guid? ProductId { get; set; }
         public int Quantity { get; set; }
     }
 
     public class OrderServicesViewModel
     {
         public Guid? OrderId { get; set; }
-        public Guid ServiceId { get; set; }
+        public Guid? ServiceId { get; set; }
     }
 
 }
