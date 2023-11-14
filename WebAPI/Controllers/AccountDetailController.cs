@@ -5,7 +5,7 @@ using DataLayer.Repositories;
 namespace WebAPI.Controllers
 {
     [ApiController]
-    [Route("controller")]
+    [Route("[controller]")]
     public class AccountDetailController : Controller
     {
         private readonly AccountDetailRepository _accountDetailRepository;
@@ -59,7 +59,7 @@ namespace WebAPI.Controllers
             var accountDetail = new AccountDetail();
             try
             {
-                accountDetail = _accountDetailRepository.Get(x => x.Id == id);
+                accountDetail = _accountDetailRepository.Get(x => x.AccountId == id);
                 if (accountDetail == null)
                 {
                     return new JsonResult(new

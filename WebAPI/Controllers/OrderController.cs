@@ -49,7 +49,7 @@ namespace WebAPI.Controllers
 				.Select(x => new OrderViewModel()
 				{
 					AccountId = x.AccountId,
-					OrderId = x.Id,
+					Id = x.Id,
 					OrderDate = x.OrderDate,
 					Status = x.Status,
 					//AccountName = _context.Accounts.Where(y => y.Id == x.AccountId).Select(y => y.Username).FirstOrDefault(),
@@ -142,7 +142,7 @@ namespace WebAPI.Controllers
 					orderProducts.Add(new OrderProduct
 					{
 						OrderId = orderId,
-						ProductId = item.ProductId,
+						ProductId = (Guid)item.ProductId,
 						Quantity = item.Quantity
 					});
 				}
