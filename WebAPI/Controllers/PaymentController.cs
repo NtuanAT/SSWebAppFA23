@@ -2,6 +2,7 @@
 using DataLayer.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using NuGet.Protocol.Plugins;
+using WebAPI.ViewModel;
 
 namespace WebAPI.Controllers
 {
@@ -23,10 +24,21 @@ namespace WebAPI.Controllers
 
         public IActionResult GetAllPayment() 
         {
-            ICollection<Payment> payment = new List<Payment>();
+            ICollection<PaymentViewModel> paymentviewmodel = new List<PaymentViewModel>();
             try
-            {
-                payment = _paymentRepository.GetAll();
+            {               
+               var  result  = _paymentRepository.GetAll();
+                foreach (var item in result)
+                {
+                    PaymentViewModel model = new PaymentViewModel();
+                    model.OrderId = item.OrderId;
+                    model.Id = item.Id;
+                    model.Method = item.Method;
+                    model.PaymentDate = item.PaymentDate;
+                    model.Status = item.Status;
+                    paymentviewmodel.Add(model);
+                   
+                }
 
             }catch (Exception ex)
             {
@@ -40,7 +52,7 @@ namespace WebAPI.Controllers
             {
                 status = true,
                 message = "Get All payment",
-                data = payment
+                data = paymentviewmodel
             }) ;
         }
         #endregion
@@ -94,10 +106,18 @@ namespace WebAPI.Controllers
         [HttpPost]
         [Route("AddPayment")]
 
-        public IActionResult AddPayment([FromBody] Payment payment) 
+        public IActionResult AddPayment([FromBody] PaymentViewModel paymentViewModel) 
         {
             try
             {
+                var payment = new Payment
+                {
+                    OrderId = paymentViewModel.OrderId,
+                    Id = paymentViewModel.Id,
+                    Method = paymentViewModel.Method,
+                    PaymentDate = paymentViewModel.PaymentDate,
+                    Status = paymentViewModel.Status,
+                };
                 _paymentRepository.Add(payment);
                 return new JsonResult(new 
                 { 
@@ -124,10 +144,18 @@ namespace WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("UpdatePayment")]
-        public IActionResult UpdatePayment([FromBody] Payment payment)
+        public IActionResult UpdatePayment([FromBody] PaymentViewModel paymentviewmodel)
         {
             try 
             {
+                var payment = new Payment
+                {
+                    OrderId = paymentviewmodel.OrderId,
+                    Id = paymentviewmodel.Id,
+                    Method = paymentviewmodel.Method,
+                    PaymentDate = paymentviewmodel.PaymentDate,
+                    Status = paymentviewmodel.Status,
+                };
                 _paymentRepository.Update(payment);
                 return new JsonResult(new
                 {

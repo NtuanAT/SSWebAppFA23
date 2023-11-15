@@ -1,6 +1,7 @@
 using DataLayer.Entities;
 using DataLayer.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using WebAPI.ViewModel;
 
 namespace WebAPI.Controllers
 {
@@ -24,10 +25,18 @@ namespace WebAPI.Controllers
 
         public IActionResult GetAlService()
         {
-            ICollection<Service> services = new List<Service>();
+            ICollection<ServiceViewModel> services = new List<ServiceViewModel>();
             try
             {
-                services = _serviceRepository.GetAll();
+                var result = _serviceRepository.GetAll();
+                foreach (var service in result)
+                {
+                    ServiceViewModel model = new ServiceViewModel();
+                    model.Id = service.Id;
+                    model.Price = service.Price;
+                    model.Type = service.Type;
+                    services.Add(model);
+                }
             }
             catch (Exception ex)
             {
@@ -94,11 +103,17 @@ namespace WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("AddService")]
-        public IActionResult AddService([FromBody] Service service)
+        public IActionResult AddService([FromBody] ServiceViewModel serviceViewModel)
         {
             try
             {
-                _serviceRepository.Add(service);
+                var services = new Service
+                {
+                    Id = serviceViewModel.Id,
+                    Price = serviceViewModel.Price,
+                    Type = serviceViewModel.Type,
+                };
+                _serviceRepository.Add(services);
                 return new JsonResult(new
                 {
                     status = true,
@@ -124,10 +139,16 @@ namespace WebAPI.Controllers
         /// <returns></returns>
         [HttpPatch]
         [Route("UpdateService")]
-        public IActionResult UpdateService([FromBody] Service service)
+        public IActionResult UpdateService([FromBody] ServiceViewModel serviceViewModel)
         {
             try
             {
+                var service = new Service
+                {
+                    Id = serviceViewModel.Id,
+                    Price = serviceViewModel.Price,
+                    Type = serviceViewModel.Type,
+                };
                 _serviceRepository.Update(service);
                 return new JsonResult(new
                 {

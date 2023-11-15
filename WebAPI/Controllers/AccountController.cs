@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using DataLayer.Entities;
 using Microsoft.AspNetCore.Authorization;
+using WebAPI.ViewModel;
 
 namespace WebAPI.Controllers
 {
@@ -25,10 +26,20 @@ namespace WebAPI.Controllers
 		 [Authorize(Roles = "Admin")]
 		public IActionResult GetAllAccount()
 		{
-			ICollection<Account> accounts = new List<Account>();
+			ICollection<AccountViewModel> accounts = new List<AccountViewModel>();
+			var accountResult = _accountRepository.GetAll();
 			try
 			{
-				accounts = _accountRepository.GetAll();
+				foreach (var accoount in accountResult)
+				{
+				AccountViewModel a = new AccountViewModel();
+					a.Id = accoount.Id;
+					a.Username = accoount.Username;
+					a.Password = accoount.Password;
+					a.Role = accoount.Role;
+					a.Status = accoount.Status;	
+					accounts.Add(a);
+				}
 			}
 			catch (Exception ex)
 			{
@@ -159,7 +170,7 @@ namespace WebAPI.Controllers
 		[HttpPatch]
 		[Route("UpdateAccount")]
 		 [Authorize(Roles = "Admin")]
-		public IActionResult UpdateAccount([FromBody] Account account)
+		public IActionResult UpdateAccount([FromBody] AccountViewModel account)
 		{
 			// Check if account exist
 			var accountToUpdate = _accountRepository.Get(x => x.Id == account.Id);
