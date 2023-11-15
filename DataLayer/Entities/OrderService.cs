@@ -12,6 +12,7 @@ public class OrderService
     public Guid ServiceId { get; set; } 
 
     public int Quantity { get; set; }
+
     public string? Message { get; set; }
 
     public virtual Order? Order { get; set; } 
