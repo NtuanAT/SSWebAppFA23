@@ -37,13 +37,20 @@ namespace WebAPI.Controllers
 					productViewModel.Name = product.Name;
 					productViewModel.Brand = product.Brand;
 					productViewModel.Color = product.Color;
-                    productViewModel.Price = product.Price;
-                    productViewModel.Catagories = product.Catagories;
+					productViewModel.Price = product.Price;
+					productViewModel.Catagories = product.Catagories;
 					productViewModel.Size = product.Size;
 					productViewModel.PictureLink = product.PictureLink;
 					products.Add(productViewModel);
 
 				}
+
+				return new JsonResult(new
+				{
+					status = true,
+					message = "Get all product success",
+					data = products
+				});
 			}
 			catch (Exception ex)
 			{
@@ -53,12 +60,6 @@ namespace WebAPI.Controllers
 					message = ex.Message
 				});
 			}
-			return new JsonResult(new
-			{
-				status = true,
-				message = "Get all product success",
-				data = products
-			});
 		}
 		#endregion
 
@@ -84,6 +85,13 @@ namespace WebAPI.Controllers
 						message = "Product not found"
 					});
 				}
+
+				return new JsonResult(new
+				{
+					status = true,
+					message = "Get product by id success",
+					data = product
+				});
 			}
 			catch (Exception ex)
 			{
@@ -93,12 +101,6 @@ namespace WebAPI.Controllers
 					message = ex.Message
 				});
 			}
-			return new JsonResult(new
-			{
-				status = true,
-				message = "Get product by id success",
-				data = product
-			});
 		}
 		#endregion
 
@@ -110,13 +112,12 @@ namespace WebAPI.Controllers
 		/// <returns></returns>
 		[HttpPost]
 		[Route("AddProduct")]
-		public IActionResult AddProduct([FromBody]ProductViewModel productViewModel)
+		public IActionResult AddProduct([FromBody] ProductViewModel productViewModel)
 		{
 			try
 			{
 				var product = new Product
 				{
-					Id = productViewModel.Id,
 					Name = productViewModel.Name,
 					Brand = productViewModel.Brand,
 					Color = productViewModel.Color,
@@ -125,7 +126,8 @@ namespace WebAPI.Controllers
 					Size = productViewModel.Size,
 					PictureLink = productViewModel.PictureLink,
 				};
-					_productRepository.Add(product);
+				_productRepository.Add(product);
+				_productRepository.SaveChanges();
 				return new JsonResult(new
 				{
 					status = true,
@@ -151,13 +153,13 @@ namespace WebAPI.Controllers
 		/// <returns></returns>
 		[HttpPatch]
 		[Route("UpdateProduct")]
-		public IActionResult UpdateProduct([FromBody]ProductViewModel productViewModel)
+		public IActionResult UpdateProduct([FromBody] ProductViewModel productViewModel)
 		{
 			try
 			{
 				var product = new Product
 				{
-					Id = productViewModel.Id,
+					Id = (Guid)productViewModel.Id,
 					Name = productViewModel.Name,
 					Brand = productViewModel.Brand,
 					Color = productViewModel.Color,
@@ -167,6 +169,7 @@ namespace WebAPI.Controllers
 					PictureLink = productViewModel.PictureLink,
 				};
 				_productRepository.Update(product);
+				_productRepository.SaveChanges();
 				return new JsonResult(new
 				{
 					status = true,
@@ -197,6 +200,7 @@ namespace WebAPI.Controllers
 			try
 			{
 				_productRepository.Delete(id);
+				_productRepository.SaveChanges();
 				return new JsonResult(new
 				{
 					status = true,

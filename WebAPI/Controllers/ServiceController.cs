@@ -23,7 +23,7 @@ namespace WebAPI.Controllers
         [HttpGet]
         [Route("GetAllService")]
 
-        public IActionResult GetAlService()
+        public IActionResult GetAllService()
         {
             ICollection<ServiceViewModel> services = new List<ServiceViewModel>();
             try
@@ -37,6 +37,12 @@ namespace WebAPI.Controllers
                     model.Type = service.Type;
                     services.Add(model);
                 }
+                return new JsonResult(new
+                {
+					status = true,
+					message = "Get all service success",
+					data = services
+				});
             }
             catch (Exception ex)
             {
@@ -46,12 +52,6 @@ namespace WebAPI.Controllers
                     message = ex.Message
                 });
             }
-            return new JsonResult(new
-            {
-                status = true,
-                message = "Get all services success",
-                data = services
-            }) ;
         }
         #endregion
 
@@ -77,6 +77,18 @@ namespace WebAPI.Controllers
                         message = "Service not found"
                     });
                 }
+                var serviceViewModel = new ServiceViewModel
+                {
+					Id = service.Id,
+					Price = service.Price,
+					Type = service.Type,
+				};
+                return new JsonResult(new
+                {
+					status = true,
+					message = "Get service by id success",
+					data = serviceViewModel
+				});
             }
             catch (Exception ex)
             {
@@ -86,12 +98,6 @@ namespace WebAPI.Controllers
                     message = ex.Message
                 });
             }
-            return new JsonResult(new
-            {
-                status = true,
-                message = "Get Service by id success",
-                data = service
-            });
         }
         #endregion
 
@@ -109,11 +115,11 @@ namespace WebAPI.Controllers
             {
                 var services = new Service
                 {
-                    Id = serviceViewModel.Id,
                     Price = serviceViewModel.Price,
                     Type = serviceViewModel.Type,
                 };
                 _serviceRepository.Add(services);
+                _serviceRepository.SaveChanges();
                 return new JsonResult(new
                 {
                     status = true,
@@ -145,11 +151,12 @@ namespace WebAPI.Controllers
             {
                 var service = new Service
                 {
-                    Id = serviceViewModel.Id,
+                    Id = (Guid)serviceViewModel.Id,
                     Price = serviceViewModel.Price,
                     Type = serviceViewModel.Type,
                 };
                 _serviceRepository.Update(service);
+                _serviceRepository.SaveChanges();
                 return new JsonResult(new
                 {
                     status = true,

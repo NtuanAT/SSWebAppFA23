@@ -45,8 +45,14 @@ namespace WebAPI.Controllers
                     immageViewModel.Notes = imageViewModel.Notes;
                     images.Add(immageViewModel);
                 }
-                
-            }
+
+				return new JsonResult(new
+				{
+					status = true,
+					message = "Get all image success",
+					data = images
+				});
+			}
             catch (Exception ex)
             {
                 return new JsonResult(new
@@ -55,12 +61,6 @@ namespace WebAPI.Controllers
                     message = ex.Message
                 });
             }
-            return new JsonResult(new
-            {
-                status = true,
-                message = "Get all image success",
-                data = images
-            });
         }
         #endregion
 
@@ -100,9 +100,16 @@ namespace WebAPI.Controllers
 
                 };
 
-               
 
-            }
+				return new JsonResult(new
+				{
+					status = true,
+					message = "Get Product by id success",
+                    date = imageViewModel
+				});
+
+
+			}
             catch (Exception ex)
             {
                 return new JsonResult(new
@@ -111,12 +118,6 @@ namespace WebAPI.Controllers
                     message = ex.Message
                 });
             }
-            return new JsonResult(new
-            {
-                status = true,
-                message= "Get Product by id success"
-                
-            });
         }
         #endregion
 
@@ -130,31 +131,33 @@ namespace WebAPI.Controllers
         [Route("GetImageByAccountId/{id}")]
         public IActionResult GetImageByAccountId(Guid id)
         {
-            var image = new Image();
+            var imageResult = new List<ImageViewModel>();
             try
             {
-                image = _imageRepository.Get(x => x.AccountId == id);
-
-                var imageViewModel = new ImageViewModel
+                var images = _imageRepository.GetList(x => x.AccountId == id);
+                foreach (var image in images)
                 {
-                    Id = image.Id,
-                    AccountId = image.AccountId,
-                    Drawing = image.Drawing,
-                    Style = image.Style,
-                    KindofPaint = image.KindofPaint,
-                    Accessory = image.Accessory,
-                    Notes = image.Notes,
-
-                };
-                if (image == null)
-                {
-                    return new JsonResult(new
+					var imageViewModel = new ImageViewModel
                     {
-                        status = false,
-                        message = "Image not found"
-                    });
-                }
-            }
+						Id = image.Id,
+						AccountId = image.AccountId,
+						Drawing = image.Drawing,
+						Style = image.Style,
+						KindofPaint = image.KindofPaint,
+						Accessory = image.Accessory,
+						Notes = image.Notes,
+
+					};
+					imageResult.Add(imageViewModel);
+				}
+
+				return new JsonResult(new
+				{
+					status = true,
+					message = "Get Image by AccountID success",
+                    data = imageResult
+				});
+			}
             catch (Exception ex)
             {
                 return new JsonResult(new
@@ -163,11 +166,6 @@ namespace WebAPI.Controllers
                     message = ex.Message
                 });
             }
-            return new JsonResult(new
-            {
-                status = true,
-                message = "Get Image by AccountID success"
-            });
         }
         #endregion
 
@@ -185,7 +183,6 @@ namespace WebAPI.Controllers
             {
                 var image = new Image
                 {
-                    Id = imageViewModel.Id,
                     AccountId = imageViewModel.AccountId,
                     Drawing = imageViewModel.Drawing,
                     Style = imageViewModel.Style,
@@ -195,6 +192,7 @@ namespace WebAPI.Controllers
 
                 };
                 _imageRepository.Add(image);
+                _imageRepository.SaveChanges();
                 return new JsonResult(new
                 {
                     status = true,
@@ -226,7 +224,7 @@ namespace WebAPI.Controllers
             {
                 var image = new Image
                 {
-                    Id = imageViewModel.Id,
+                    Id = (Guid)imageViewModel.Id,
                     AccountId = imageViewModel.AccountId,
                     Drawing = imageViewModel.Drawing,
                     Style = imageViewModel.Style,
@@ -236,6 +234,7 @@ namespace WebAPI.Controllers
 
                 };
                 _imageRepository.Update(image);
+                _imageRepository.SaveChanges();
                 return new JsonResult(new
                 {
                     status = true,
@@ -266,6 +265,7 @@ namespace WebAPI.Controllers
             try
             {
                 _imageRepository.Delete(id);
+                _imageRepository.SaveChanges();
                 return new JsonResult(new
                 {
                     status = true,
