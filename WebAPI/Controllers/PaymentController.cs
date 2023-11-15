@@ -6,6 +6,8 @@ using WebAPI.ViewModel;
 
 namespace WebAPI.Controllers
 {
+    [ApiController]
+    [Route("[controller]")]
     public class PaymentController: Controller
     {
         private readonly PaymentRepository _paymentRepository;

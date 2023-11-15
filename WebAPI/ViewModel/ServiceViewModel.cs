@@ -8,6 +8,6 @@ namespace WebAPI.ViewModel
         public decimal Price { get; set; }
         public string Type { get; set; } = null!;
 
-        public  ICollection<OrderServicesViewModel>? Orders { get; set; }
+        public  ICollection<OrderServiceViewModel>? Orders { get; set; }
     }
 }

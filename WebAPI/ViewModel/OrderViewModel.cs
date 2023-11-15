@@ -17,7 +17,7 @@ namespace WebAPI.ViewModel
 
         public ICollection<OrderProductViewModel>? Products { get; set; }
 
-        public ICollection<OrderServicesViewModel>? Services { get; set; }
+        public ICollection<OrderServiceViewModel>? Services { get; set; }
 
     }
 
@@ -28,10 +28,12 @@ namespace WebAPI.ViewModel
         public int Quantity { get; set; }
     }
 
-    public class OrderServicesViewModel
+    public class OrderServiceViewModel
     {
         public Guid? OrderId { get; set; }
-        public Guid? ServiceId { get; set; }
+        public Guid ServiceId { get; set; }
+        public int Quantity { get; set; }
+        public string? Message { get; set; }
     }
 
 }
