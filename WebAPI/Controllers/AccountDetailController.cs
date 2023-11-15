@@ -27,13 +27,13 @@ namespace WebAPI.Controllers
 
         public IActionResult GetAllaccountDetail()
         {
-            ICollection<AccountDetailVieweModel> accountDetails = new List<AccountDetailVieweModel>();
+            ICollection<AccountDetailViewModel> accountDetails = new List<AccountDetailViewModel>();
             var result = _accountDetailRepository.GetAll();
             try
             {
                 foreach(var accountDetailModel in result)
                 {
-                    AccountDetailVieweModel model = new AccountDetailVieweModel();
+                    AccountDetailViewModel model = new AccountDetailViewModel();
                     model.Id = accountDetailModel.Id;
                     model.AccountId = accountDetailModel.AccountId;
                     model.Avatar = accountDetailModel.Avatar;
@@ -87,7 +87,7 @@ namespace WebAPI.Controllers
 
                 }
 
-                var accountDetailViewModel = new AccountDetailVieweModel
+                var accountDetailViewModel = new AccountDetailViewModel()
                 {
                     Id = accountDetail.Id,
                     AccountId = accountDetail.AccountId,
@@ -98,7 +98,14 @@ namespace WebAPI.Controllers
                     Gender = accountDetail.Gender,
                     
                 };
-            }
+
+				return new JsonResult(new
+				{
+					status = true,
+					message = "Get Account Detail by id success",
+					data = accountDetailViewModel
+				});
+			}
             catch (Exception ex)
             {
                 return new JsonResult(new
@@ -107,12 +114,6 @@ namespace WebAPI.Controllers
                     message = ex.Message
                 });
             }
-            return new JsonResult(new
-            {
-                status = true,
-                message = "Get Account Detail by id success",
-				data = accountDetailViewModel
-			}); 
         }
         #endregion
 
@@ -124,7 +125,7 @@ namespace WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("AddAccountDetail")]
-        public IActionResult AddAccountDetail([FromBody] AccountDetailVieweModel accountDetailModel)
+        public IActionResult AddAccountDetail([FromBody] AccountDetailViewModel accountDetailModel)
         {
             try
             {

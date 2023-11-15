@@ -2,7 +2,7 @@
 
 namespace WebAPI.ViewModel
 {
-    public class AccountDetailVieweModel
+    public class AccountDetailViewModel
     {  
         public Guid? Id { get; set; }
       
