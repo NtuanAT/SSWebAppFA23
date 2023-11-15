@@ -15,24 +15,25 @@ namespace WebAPI.ViewModel
 
         public AccountViewModel? Account { get; set; }
 
-        public ICollection<OrderServiceViewModel>? Products { get; set; }
+        public ICollection<OrderProductViewModel>? Products { get; set; }
 
-        public ICollection<OrderServicesViewModel>? Services { get; set; }
+        public ICollection<OrderServiceViewModel>? Services { get; set; }
 
     }
 
-    public class OrderServiceViewModel
+    public class OrderProductViewModel
     {
         public Guid? OrderId { get; set; }
         public Guid? ProductId { get; set; }
         public int Quantity { get; set; }
     }
 
-    public class OrderServicesViewModel
+    public class OrderServiceViewModel
     {
         public Guid? OrderId { get; set; }
         public Guid ServiceId { get; set; }
         public int Quantity { get; set; }
+        public string? Message { get; set; }
     }
 
 }

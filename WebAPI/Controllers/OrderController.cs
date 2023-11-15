@@ -18,6 +18,7 @@ namespace WebAPI.Controllers
         private readonly OrderProductRepository _orderProductRepository;
         private readonly OrderServiceRepository _orderServiceRepository;
         private readonly ServiceRepository _serviceRepository;
+        private readonly ProductRepository _productRepository;
         private readonly SswdatabaseContext _context;
 
         public OrderController(OrderRepository orderRepository,
@@ -25,6 +26,7 @@ namespace WebAPI.Controllers
          OrderProductRepository orderProductRepository,
           OrderServiceRepository orderServiceRepository,
           ServiceRepository serviceRepository,
+          ProductRepository productRepository,
           SswdatabaseContext context
           )
         {
@@ -33,6 +35,7 @@ namespace WebAPI.Controllers
             _orderProductRepository = orderProductRepository;
             _orderServiceRepository = orderServiceRepository;
             _serviceRepository = serviceRepository;
+            _productRepository = productRepository;
             _context = context;
         }
 
@@ -58,7 +61,7 @@ namespace WebAPI.Controllers
                     Status = x.Status,
                     //AccountName = _context.Accounts.Where(y => y.Id == x.AccountId).Select(y => y.Username).FirstOrDefault(),
                     Products = _context.OderProducts.Where(y => y.OrderId == x.Id)
-                    .Select(y => new OrderServiceViewModel()
+                    .Select(y => new OrderProductViewModel()
                     {
                         ProductId = y.ProductId,
                         Quantity = y.Quantity,
@@ -124,24 +127,69 @@ namespace WebAPI.Controllers
         }
         #endregion
 
-        #region Add Order
+        #region Get Order by AccountID
+        /// <summary>
+        /// Get Order By AccountID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("GetOrderbyAccountID/{id}")]
+        public IActionResult GetOrderByAccountID(Guid id)
+        {
+            try
+            {
+                // Assuming the generic repository has a method like Get(Expression<Func<TEntity, bool>> filter)
+                var orders = _orderRepository.GetList(order => order.AccountId == id);
+
+                if (orders == null || !orders.Any())
+                {
+                    return new JsonResult(new
+                    {
+                        status = false,
+                        message = "No orders found for the specified AccountID"
+                    });
+                }
+
+                return new JsonResult(new
+                {
+                    status = true,
+                    message = "Get orders by AccountID success",
+                    data = orders
+                });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new
+                {
+                    status = false,
+                    message = ex.Message
+                });
+            }
+        }
+        #endregion
+
+        #region Add Product Order
         /// <summary>
         /// Get all product
         /// </summary>
         /// <param name="order"></param>
         /// <returns></returns>
         [HttpPost]
-        [Route("AddOrder")]
+        [Route("AddProductOrder")]
         [Authorize]
-        public IActionResult AddOrder([FromBody] List<OrderServiceViewModel> items)
+        public IActionResult AddProductOrder([FromBody] List<OrderProductViewModel> items)
         {
             try
             {
                 var orderProducts = new List<OrderProduct>();
-                int total = 0;
+                decimal total = 0;
                 var orderId = Guid.NewGuid();
                 foreach (var item in items)
                 {
+                    var product = _productRepository.Get(s => s.Id == item.ProductId);
+                    decimal totalProductPrice = product.Price * item.Quantity;
+                    total += totalProductPrice;
                     orderProducts.Add(new OrderProduct
                     {
                         OrderId = orderId,
@@ -154,7 +202,7 @@ namespace WebAPI.Controllers
                     Id = orderId,
                     AccountId = Guid.Parse(User.Identity.Name),
                     OrderDate = DateTime.Now,
-                    Total = items.Count,
+                    Total = total
                 };
                 _orderRepository.Add(order);
                 _orderProductRepository.AddRange(orderProducts);
@@ -194,7 +242,7 @@ namespace WebAPI.Controllers
         [HttpPost]
         [Route("AddServiceOrder")]
         [Authorize]
-        public IActionResult AddServiceOrder([FromBody] List<OrderServicesViewModel> items)
+        public IActionResult AddServiceOrder([FromBody] List<OrderServiceViewModel> items)
         {
             try
             {
@@ -213,8 +261,9 @@ namespace WebAPI.Controllers
                         {
                             OrderId = orderId,
                             ServiceId = (Guid)item.ServiceId,
-                            Quantity= item.Quantity
-                        });;
+                            Quantity = item.Quantity,
+                            Message = item.Message
+                        }); ;
                     }
                     else
                     {
@@ -347,44 +396,5 @@ namespace WebAPI.Controllers
         }
         #endregion
 
-        #region Get Order by AccountID
-        /// <summary>
-        /// Get Order By AccountID
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        [HttpGet]
-        [Route("GetOrderbyAccountID/{id}")]
-        public IActionResult GetOrderByAccountID(Guid id)
-        {
-            var order = new Order();
-            try
-            {
-                order = _orderRepository.Get(x => x.AccountId == id);
-                if (order == null)
-                {
-                    return new JsonResult(new
-                    {
-                        status = false,
-                        message = "Order not found"
-                    });
-                }
-            }
-            catch (Exception ex)
-            {
-                return new JsonResult(new
-                {
-                    status = false,
-                    message = ex.Message
-                });
-            }
-            return new JsonResult(new
-            {
-                status = true,
-                message = "Get order by AccountID success",
-                data = order
-            });
-        }
-        #endregion
     }
 }

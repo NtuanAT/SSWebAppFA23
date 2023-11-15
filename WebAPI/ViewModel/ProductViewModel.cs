@@ -15,6 +15,6 @@ namespace WebAPI.ViewModel
         public double Size { get; set; }
 
         public string? PictureLink { get; set; }
-        public ICollection<OrderServiceViewModel>? Orders { get; set; }
+        public ICollection<OrderProductViewModel>? Orders { get; set; }
     }
 }
