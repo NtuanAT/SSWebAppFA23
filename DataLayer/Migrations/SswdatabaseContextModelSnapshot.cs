@@ -45,6 +45,32 @@ namespace DataLayer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Accounts");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("d2376e25-52f2-431d-85ed-0d453f1e9570"),
+                            Password = "123456",
+                            Role = 1,
+                            Status = 0,
+                            Username = "admin"
+                        },
+                        new
+                        {
+                            Id = new Guid("1527e96c-5cfd-4883-a475-4feb357014e3"),
+                            Password = "123456",
+                            Role = 0,
+                            Status = 0,
+                            Username = "customer"
+                        },
+                        new
+                        {
+                            Id = new Guid("4b224db4-473b-4740-9a16-38ae436dad82"),
+                            Password = "123456",
+                            Role = 2,
+                            Status = 0,
+                            Username = "staff"
+                        });
                 });
 
             modelBuilder.Entity("DataLayer.Entities.AccountDetail", b =>
@@ -191,6 +217,9 @@ namespace DataLayer.Migrations
                     b.Property<Guid>("ServiceId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
                     b.HasKey("OrderId", "ServiceId");
 
                     b.HasIndex("ServiceId");
@@ -253,6 +282,129 @@ namespace DataLayer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Products");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("31b97292-19b4-48d9-aaf4-6f55d4ca2a30"),
+                            Brand = "Nike",
+                            Catagories = "Shoes",
+                            Color = "Purple",
+                            Name = "Uzui Tengen",
+                            PictureLink = "",
+                            Price = 58m,
+                            Size = 40.0
+                        },
+                        new
+                        {
+                            Id = new Guid("a5165b79-b50b-4440-a1ab-cf8fa248efc4"),
+                            Brand = "Converse",
+                            Catagories = "Shoes",
+                            Color = "Black",
+                            Name = "Spider-Verse",
+                            PictureLink = "",
+                            Price = 68m,
+                            Size = 41.0
+                        },
+                        new
+                        {
+                            Id = new Guid("62ff70e7-af58-47ee-b4a6-6c4cdf91f81a"),
+                            Brand = "Autry",
+                            Catagories = "Shoes",
+                            Color = "Silver",
+                            Name = "Silver Serpent",
+                            PictureLink = "",
+                            Price = 49m,
+                            Size = 39.0
+                        },
+                        new
+                        {
+                            Id = new Guid("6175e609-a360-44a6-ac91-5a0752737d03"),
+                            Brand = "Adidas",
+                            Catagories = "Shoes",
+                            Color = "Purple",
+                            Name = "Nebula Burst",
+                            PictureLink = "",
+                            Price = 58m,
+                            Size = 38.0
+                        },
+                        new
+                        {
+                            Id = new Guid("46b1ec3e-65b1-40a1-bcd8-4fa79b80dd74"),
+                            Brand = "Air Jordan",
+                            Catagories = "Shoes",
+                            Color = "Blue",
+                            Name = "Lighting Thread",
+                            PictureLink = "",
+                            Price = 91m,
+                            Size = 42.0
+                        },
+                        new
+                        {
+                            Id = new Guid("1883c618-b0d1-46aa-a27a-d891a6bba4de"),
+                            Brand = "Air Jordan",
+                            Catagories = "Shoes",
+                            Color = "Blue",
+                            Name = "Enchanted Sponge Bob",
+                            PictureLink = "",
+                            Price = 63m,
+                            Size = 36.0
+                        },
+                        new
+                        {
+                            Id = new Guid("1a2aac64-40c0-4bc6-950c-a8f21197a313"),
+                            Brand = "Nike",
+                            Catagories = "Shoes",
+                            Color = "Red",
+                            Name = "Electric Dream",
+                            PictureLink = "",
+                            Price = 78m,
+                            Size = 43.0
+                        },
+                        new
+                        {
+                            Id = new Guid("68a4fdce-40fb-4c59-9c87-ac66466dd824"),
+                            Brand = "Puma",
+                            Catagories = "Shoes",
+                            Color = "Purple",
+                            Name = "Crimson Blaze",
+                            PictureLink = "",
+                            Price = 46m,
+                            Size = 45.0
+                        },
+                        new
+                        {
+                            Id = new Guid("2e42e077-1e74-4ea3-8320-e0a18900d8af"),
+                            Brand = "Nike",
+                            Catagories = "Shoes",
+                            Color = "Purple",
+                            Name = "Airbrushed Sneakers",
+                            PictureLink = "",
+                            Price = 99m,
+                            Size = 35.0
+                        },
+                        new
+                        {
+                            Id = new Guid("bbdb608a-ead9-48ba-913d-e2ce24b4d371"),
+                            Brand = "Converse",
+                            Catagories = "Shoes",
+                            Color = "Black",
+                            Name = "Arkham Knight",
+                            PictureLink = "",
+                            Price = 112m,
+                            Size = 38.0
+                        },
+                        new
+                        {
+                            Id = new Guid("40628a83-cd4c-4a75-8152-36c863005ce7"),
+                            Brand = "Converse",
+                            Catagories = "Shoes",
+                            Color = "White",
+                            Name = "Cute",
+                            PictureLink = "",
+                            Price = 55m,
+                            Size = 40.0
+                        });
                 });
 
             modelBuilder.Entity("DataLayer.Entities.Service", b =>
@@ -271,6 +423,26 @@ namespace DataLayer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Services");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("7ff262de-d146-46f8-bc30-92bb2f4faa7c"),
+                            Price = 10m,
+                            Type = "Clean"
+                        },
+                        new
+                        {
+                            Id = new Guid("fc4a485e-2c43-4d0d-9395-8cb2b368fcde"),
+                            Price = 20m,
+                            Type = "Repair"
+                        },
+                        new
+                        {
+                            Id = new Guid("c4b0323d-9241-4bf5-9ec4-89e88ff92fc0"),
+                            Price = 30m,
+                            Type = "Customize"
+                        });
                 });
 
             modelBuilder.Entity("DataLayer.Entities.AccountDetail", b =>

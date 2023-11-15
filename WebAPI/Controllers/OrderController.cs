@@ -183,6 +183,11 @@ namespace WebAPI.Controllers
 		#endregion
 
 		#region Update Order
+		/// <summary>
+		/// Update Order
+		/// </summary>
+		/// <param name="order"></param>
+		/// <returns></returns>
 		[HttpPatch]
 		[Route("UpdateOrder")]
 

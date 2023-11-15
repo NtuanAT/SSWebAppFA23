@@ -73,6 +73,173 @@ public partial class SswdatabaseContext : DbContext
 		modelBuilder.Entity<Payment>().HasOne(p => p.Order).WithOne(o => o.Payment)
 			.HasConstraintName("FK_Order_Payment");
 
+		#region Data Seeding
+		modelBuilder.Entity<Product>().HasData(new Product()
+		{
+			Id = Guid.NewGuid(),
+			Name = "Uzui Tengen",
+			Brand = "Nike",
+			Color = "Purple",
+			Price = 58,
+			Catagories = "Shoes",
+			Size = 40,
+			PictureLink = ""
+		});
+		modelBuilder.Entity<Product>().HasData(new Product()
+		{
+			Id = Guid.NewGuid(),
+			Name = "Spider-Verse",
+			Brand = "Converse",
+			Color = "Black",
+			Price = 68,
+			Catagories = "Shoes",
+			Size = 41,
+			PictureLink = ""
+		});
+		modelBuilder.Entity<Product>().HasData(new Product()
+		{
+			Id = Guid.NewGuid(),
+			Name = "Silver Serpent",
+			Brand = "Autry",
+			Color = "Silver",
+			Price = 49,
+			Catagories = "Shoes",
+			Size = 39,
+			PictureLink = ""
+		});
+		modelBuilder.Entity<Product>().HasData(new Product()
+		{
+			Id = Guid.NewGuid(),
+			Name = "Nebula Burst",
+			Brand = "Adidas",
+			Color = "Purple",
+			Price = 58,
+			Catagories = "Shoes",
+			Size = 38,
+			PictureLink = ""
+		});
+		modelBuilder.Entity<Product>().HasData(new Product()
+		{
+			Id = Guid.NewGuid(),
+			Name = "Lighting Thread",
+			Brand = "Air Jordan",
+			Color = "Blue",
+			Price = 91,
+			Catagories = "Shoes",
+			Size = 42,
+			PictureLink = ""
+		});
+		modelBuilder.Entity<Product>().HasData(new Product()
+		{
+			Id = Guid.NewGuid(),
+			Name = "Enchanted Sponge Bob",
+			Brand = "Air Jordan",
+			Color = "Blue",
+			Price = 63,
+			Catagories = "Shoes",
+			Size = 36,
+			PictureLink = ""
+		});
+		modelBuilder.Entity<Product>().HasData(new Product()
+		{
+			Id = Guid.NewGuid(),
+			Name = "Electric Dream",
+			Brand = "Nike",
+			Color = "Red",
+			Price = 78,
+			Catagories = "Shoes",
+			Size = 43,
+			PictureLink = ""
+		});
+		modelBuilder.Entity<Product>().HasData(new Product()
+		{
+			Id = Guid.NewGuid(),
+			Name = "Crimson Blaze",
+			Brand = "Puma",
+			Color = "Purple",
+			Price = 46,
+			Catagories = "Shoes",
+			Size = 45,
+			PictureLink = ""
+		});
+		modelBuilder.Entity<Product>().HasData(new Product()
+		{
+			Id = Guid.NewGuid(),
+			Name = "Airbrushed Sneakers",
+			Brand = "Nike",
+			Color = "Purple",
+			Price = 99,
+			Catagories = "Shoes",
+			Size = 35,
+			PictureLink = ""
+		});
+		modelBuilder.Entity<Product>().HasData(new Product()
+		{
+			Id = Guid.NewGuid(),
+			Name = "Arkham Knight",
+			Brand = "Converse",
+			Color = "Black",
+			Price = 112,
+			Catagories = "Shoes",
+			Size = 38,
+			PictureLink = ""
+		});
+		modelBuilder.Entity<Product>().HasData(new Product()
+		{
+			Id = Guid.NewGuid(),
+			Name = "Cute",
+			Brand = "Converse",
+			Color = "White",
+			Price = 55,
+			Catagories = "Shoes",
+			Size = 40,
+			PictureLink = ""
+		});
+
+		modelBuilder.Entity<Service>().HasData(new Service()
+		{
+			Id = Guid.NewGuid(),
+			Type = "Clean",
+			Price = 10
+		});
+		modelBuilder.Entity<Service>().HasData(new Service()
+		{
+			Id = Guid.NewGuid(),
+			Type = "Repair",
+			Price = 20
+		});
+		modelBuilder.Entity<Service>().HasData(new Service()
+		{
+			Id = Guid.NewGuid(),
+			Type = "Customize",
+			Price = 30
+		});
+
+		modelBuilder.Entity<Account>().HasData(new Account()
+		{
+			Id = Guid.NewGuid(),
+			Username = "admin",
+			Password = "123456",
+			Role = AccountRole.Admin,
+			Status = AccountStatus.Active
+		});
+		modelBuilder.Entity<Account>().HasData(new Account()
+		{
+			Id= Guid.NewGuid(),
+			Username = "customer",
+			Password = "123456",
+			Role = AccountRole.Customer,
+			Status = AccountStatus.Active
+		});
+		modelBuilder.Entity<Account>().HasData(new Account()
+		{
+			Id = Guid.NewGuid(),
+			Username = "staff",
+			Password = "123456",
+			Role = AccountRole.Staff,
+			Status = AccountStatus.Active
+		});
+		#endregion
 		OnModelCreatingPartial(modelBuilder);
 	}
 
