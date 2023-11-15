@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using DataLayer.Entities;
 using DataLayer.Repositories;
+using WebAPI.ViewModel;
 
 namespace WebAPI.Controllers
 {
@@ -9,6 +10,8 @@ namespace WebAPI.Controllers
     public class AccountDetailController : Controller
     {
         private readonly AccountDetailRepository _accountDetailRepository;
+        
+
         public AccountDetailController(AccountDetailRepository accountDetailRepository)
         {
             _accountDetailRepository = accountDetailRepository;
@@ -24,10 +27,23 @@ namespace WebAPI.Controllers
 
         public IActionResult GetAllaccountDetail()
         {
-            ICollection<AccountDetail> accountDetails = new List<AccountDetail>();
+            ICollection<AccountDetailVieweModel> accountDetails = new List<AccountDetailVieweModel>();
+            var result = _accountDetailRepository.GetAll();
             try
             {
-                accountDetails = _accountDetailRepository.GetAll();
+                foreach(var accountDetailModel in result)
+                {
+                    AccountDetailVieweModel model = new AccountDetailVieweModel();
+                    model.Id = accountDetailModel.Id;
+                    model.AccountId = accountDetailModel.AccountId;
+                    model.Avatar = accountDetailModel.Avatar;
+                    model.Fullname = accountDetailModel.Fullname;
+                    model.Address = accountDetailModel.Address;
+                    model.Phone = accountDetailModel.Phone;
+                    model.Gender = accountDetailModel.Gender;
+                    accountDetails.Add(model);
+
+                }
             }
             catch (Exception ex)
             {
@@ -40,7 +56,7 @@ namespace WebAPI.Controllers
             return new JsonResult(new
             {
                 status = true,
-                message = "Get all Account Detail success",
+                message = "Get all Account Detail successful",
                 data = accountDetails
             });
         }
@@ -56,10 +72,10 @@ namespace WebAPI.Controllers
         [Route("GetAccountDetailByAccountId/{id}")]
         public IActionResult GetAccountDetailByAccountId(Guid id)
         {
-            var accountDetail = new AccountDetail();
+
             try
             {
-                accountDetail = _accountDetailRepository.Get(x => x.AccountId == id);
+                var accountDetail = _accountDetailRepository.Get(x => x.AccountId == id);
                 if (accountDetail == null)
                 {
                     return new JsonResult(new
@@ -67,7 +83,21 @@ namespace WebAPI.Controllers
                         status = false,
                         message = "Account not found"
                     });
+
+
                 }
+
+                var accountDetailViewModel = new AccountDetailVieweModel
+                {
+                    Id = accountDetail.Id,
+                    AccountId = accountDetail.AccountId,
+                    Avatar = accountDetail.Avatar,
+                    Fullname = accountDetail.Fullname,
+                    Address = accountDetail.Address,
+                    Phone = accountDetail.Phone,
+                    Gender = accountDetail.Gender,
+                    
+                };
             }
             catch (Exception ex)
             {
@@ -81,8 +111,8 @@ namespace WebAPI.Controllers
             {
                 status = true,
                 message = "Get Account Detail by id success",
-                data = accountDetail
-            });
+				data = accountDetailViewModel
+			}); 
         }
         #endregion
 
@@ -94,10 +124,23 @@ namespace WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("AddAccountDetail")]
-        public IActionResult AddAccountDetail([FromBody] AccountDetail accountDetail)
+        public IActionResult AddAccountDetail([FromBody] AccountDetailVieweModel accountDetailModel)
         {
             try
             {
+
+                var accountDetail = new AccountDetail
+                {
+                    // Map properties manually
+                    AccountId = accountDetailModel.AccountId,
+                    Avatar = accountDetailModel.Avatar,
+                    Fullname = accountDetailModel.Fullname,
+                    Address = accountDetailModel.Address,
+                    Phone = accountDetailModel.Phone,
+                    Gender = accountDetailModel.Gender
+                    // Map other properties as needed
+                };
+
                 _accountDetailRepository.Add(accountDetail);
                 _accountDetailRepository.SaveChanges();
                 return new JsonResult(new
@@ -125,10 +168,20 @@ namespace WebAPI.Controllers
         /// <returns></returns>
         [HttpPatch]
         [Route("UpdateAccountDetail")]
-        public IActionResult UpdateAccountDetail([FromBody] AccountDetail accountDetail)
+        public IActionResult UpdateAccountDetail([FromBody] AccountDetailViewModel accountDetailViewModel)
         {
             try
             {
+                var accountDetail = new AccountDetail
+                {
+                    Id = accountDetailViewModel.AccountId,
+                    AccountId = accountDetailViewModel.AccountId,
+                    Avatar = accountDetailViewModel.Avatar,
+                    Fullname = accountDetailViewModel.Fullname,
+                    Address = accountDetailViewModel.Address,
+                    Phone = accountDetailViewModel.Phone,
+                    Gender = accountDetailViewModel.Gender
+                };
                 _accountDetailRepository.Update(accountDetail);
                 _accountDetailRepository.SaveChanges();
                 return new JsonResult(new
@@ -160,14 +213,32 @@ namespace WebAPI.Controllers
         {
             try
             {
-                _accountDetailRepository.Delete(id);
-                _accountDetailRepository.SaveChanges();
-                return new JsonResult(new
+                var accountDetail = _accountDetailRepository.Get(x => x.AccountId == id);
+
+                if (accountDetail == null)
                 {
-                    status = true,
-                    message = "Delete Account Detail success"
-                });
+                    return new JsonResult(new
+                    {
+                        status = false,
+                        message = "Account not found"
+                    });
+
+
+                }
+                else
+                {
+					_accountDetailRepository.Delete(id);
+					_accountDetailRepository.SaveChanges();
+
+					return new JsonResult(new
+                    {
+                        status = true,
+                        message = "Delete Account Detail success"
+                    });
+                }
             }
+             
+            
             catch (Exception ex)
             {
                 return new JsonResult(new

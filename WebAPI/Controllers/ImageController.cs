@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using DataLayer.Entities;
 using DataLayer.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using WebAPI.ViewModel;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -29,10 +30,22 @@ namespace WebAPI.Controllers
         [Route("GetAllImage")]
         public IActionResult GetAllImage()
         {
-            ICollection<Image> images = new List<Image>();
+            ICollection<ImageViewModel> images = new List<ImageViewModel>();
             try
             {
-                images = _imageRepository.GetAll();
+                foreach (var imageViewModel in _imageRepository.GetAll())
+                {
+                    ImageViewModel immageViewModel = new ImageViewModel();
+                    immageViewModel.Id = imageViewModel.Id;
+                    immageViewModel.AccountId = imageViewModel.AccountId;
+                    immageViewModel.Drawing = imageViewModel.Drawing;
+                    immageViewModel.Style = imageViewModel.Style;
+                    immageViewModel.KindofPaint = imageViewModel.KindofPaint;
+                    immageViewModel.Accessory = imageViewModel.Accessory;
+                    immageViewModel.Notes = imageViewModel.Notes;
+                    images.Add(immageViewModel);
+                }
+                
             }
             catch (Exception ex)
             {
@@ -64,6 +77,7 @@ namespace WebAPI.Controllers
             var image = new Image();
             try
             {
+               
                 image = _imageRepository.Get(x => x.Id == id);
                 if (image == null)
                 {
@@ -73,6 +87,21 @@ namespace WebAPI.Controllers
                         message = "Image not found"
                     });
                 }
+
+                var imageViewModel = new ImageViewModel
+                {
+                    Id = image.Id,
+                    AccountId = image.AccountId,
+                    Drawing = image.Drawing,
+                    Style = image.Style,
+                    KindofPaint = image.KindofPaint,
+                    Accessory = image.Accessory,
+                    Notes = image.Notes,
+
+                };
+
+               
+
             }
             catch (Exception ex)
             {
@@ -86,6 +115,7 @@ namespace WebAPI.Controllers
             {
                 status = true,
                 message= "Get Product by id success"
+                
             });
         }
         #endregion
@@ -104,6 +134,18 @@ namespace WebAPI.Controllers
             try
             {
                 image = _imageRepository.Get(x => x.AccountId == id);
+
+                var imageViewModel = new ImageViewModel
+                {
+                    Id = image.Id,
+                    AccountId = image.AccountId,
+                    Drawing = image.Drawing,
+                    Style = image.Style,
+                    KindofPaint = image.KindofPaint,
+                    Accessory = image.Accessory,
+                    Notes = image.Notes,
+
+                };
                 if (image == null)
                 {
                     return new JsonResult(new
@@ -137,10 +179,21 @@ namespace WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("AddImage")]
-        public IActionResult AddImage([FromBody] Image image)
+        public IActionResult AddImage([FromBody] ImageViewModel imageViewModel)
         {
             try
             {
+                var image = new Image
+                {
+                    Id = imageViewModel.Id,
+                    AccountId = imageViewModel.AccountId,
+                    Drawing = imageViewModel.Drawing,
+                    Style = imageViewModel.Style,
+                    KindofPaint = imageViewModel.KindofPaint,
+                    Accessory = imageViewModel.Accessory,
+                    Notes = imageViewModel.Notes,
+
+                };
                 _imageRepository.Add(image);
                 return new JsonResult(new
                 {
@@ -167,10 +220,21 @@ namespace WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("UpdateImage")]
-        public IActionResult UpdateImage([FromBody] Image image)
+        public IActionResult UpdateImage([FromBody] ImageViewModel imageViewModel)
         {
             try
             {
+                var image = new Image
+                {
+                    Id = imageViewModel.Id,
+                    AccountId = imageViewModel.AccountId,
+                    Drawing = imageViewModel.Drawing,
+                    Style = imageViewModel.Style,
+                    KindofPaint = imageViewModel.KindofPaint,
+                    Accessory = imageViewModel.Accessory,
+                    Notes = imageViewModel.Notes,
+
+                };
                 _imageRepository.Update(image);
                 return new JsonResult(new
                 {

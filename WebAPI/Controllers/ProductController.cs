@@ -1,8 +1,7 @@
 ﻿using DataLayer.Entities;
 using DataLayer.Repositories;
 using Microsoft.AspNetCore.Mvc;
-
-
+using WebAPI.ViewModel;
 
 namespace WebAPI.Controllers
 {
@@ -26,10 +25,25 @@ namespace WebAPI.Controllers
 
 		public IActionResult GetAllProduct()
 		{
-			ICollection<Product> products = new List<Product>();
+			ICollection<ProductViewModel> products = new List<ProductViewModel>();
 			try
 			{
-				products = _productRepository.GetAll();
+
+				var result = _productRepository.GetAll();
+				foreach (var product in result)
+				{
+					ProductViewModel productViewModel = new ProductViewModel();
+					productViewModel.Id = product.Id;
+					productViewModel.Name = product.Name;
+					productViewModel.Brand = product.Brand;
+					productViewModel.Color = product.Color;
+                    productViewModel.Price = product.Price;
+                    productViewModel.Catagories = product.Catagories;
+					productViewModel.Size = product.Size;
+					productViewModel.PictureLink = product.PictureLink;
+					products.Add(productViewModel);
+
+				}
 			}
 			catch (Exception ex)
 			{
@@ -96,11 +110,22 @@ namespace WebAPI.Controllers
 		/// <returns></returns>
 		[HttpPost]
 		[Route("AddProduct")]
-		public IActionResult AddProduct([FromBody]Product product)
+		public IActionResult AddProduct([FromBody]ProductViewModel productViewModel)
 		{
 			try
 			{
-				_productRepository.Add(product);
+				var product = new Product
+				{
+					Id = productViewModel.Id,
+					Name = productViewModel.Name,
+					Brand = productViewModel.Brand,
+					Color = productViewModel.Color,
+					Price = productViewModel.Price,
+					Catagories = productViewModel.Catagories,
+					Size = productViewModel.Size,
+					PictureLink = productViewModel.PictureLink,
+				};
+					_productRepository.Add(product);
 				return new JsonResult(new
 				{
 					status = true,
@@ -126,10 +151,21 @@ namespace WebAPI.Controllers
 		/// <returns></returns>
 		[HttpPatch]
 		[Route("UpdateProduct")]
-		public IActionResult UpdateProduct([FromBody]Product product)
+		public IActionResult UpdateProduct([FromBody]ProductViewModel productViewModel)
 		{
 			try
 			{
+				var product = new Product
+				{
+					Id = productViewModel.Id,
+					Name = productViewModel.Name,
+					Brand = productViewModel.Brand,
+					Color = productViewModel.Color,
+					Price = productViewModel.Price,
+					Catagories = productViewModel.Catagories,
+					Size = productViewModel.Size,
+					PictureLink = productViewModel.PictureLink,
+				};
 				_productRepository.Update(product);
 				return new JsonResult(new
 				{

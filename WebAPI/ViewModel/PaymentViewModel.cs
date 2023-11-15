@@ -4,7 +4,7 @@ namespace WebAPI.ViewModel
 {
     public class PaymentViewModel
     {
-        public Guid? Id { get; set; }
+        public Guid Id { get; set; }
         public Guid OrderId { get; set; }
         public string Method { get; set; } = null!;
         public DateTime PaymentDate { get; set; }
