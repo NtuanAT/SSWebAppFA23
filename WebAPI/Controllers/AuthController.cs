@@ -51,6 +51,7 @@ namespace WebAPI.Controllers
 					});
 				}
 				_accountRepository.Add(account);
+				_accountRepository.SaveChanges();
 
 				return new JsonResult(new
 				{
@@ -110,8 +111,9 @@ namespace WebAPI.Controllers
 			List<Claim> claims = new List<Claim>()
 			{
 				new Claim(ClaimTypes.Name, account.Id.ToString()),
+				new Claim(ClaimTypes.Role, account.Role.ToString()),
 				new Claim("AccountID", account.Id.ToString()),
-				new Claim(ClaimTypes.Role, account.Role.ToString())
+				new Claim("Role", account.Role.ToString()),
 			};
 
 			var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("c2VydmVwZXJmZWN0bHljaGVlc2VxdWlja2NvYWNoY29sbGVjdHNsb3Bld2lzZWNhbWU="));
