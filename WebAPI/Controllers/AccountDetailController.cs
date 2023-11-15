@@ -14,9 +14,9 @@ namespace WebAPI.Controllers
             _accountDetailRepository = accountDetailRepository;
         }
 
-        #region Get All Acc Detail
+        #region Get All Account Detail
         /// <summary>
-        /// Get all detail
+        /// Get All Account Detail
         /// </summary>
         /// <returns></returns>
         [HttpGet]
@@ -46,15 +46,15 @@ namespace WebAPI.Controllers
         }
         #endregion
 
-        #region Get accountDetail By Id
+        #region Get Account Detail By AccountID
         /// <summary>
-        /// Get accountDetail by id
+        /// Get Account Detail By AccountID
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet]
-        [Route("GetaccountDetailById/{id}")]
-        public IActionResult GetAccountDetailById(Guid id)
+        [Route("GetAccountDetailByAccountId/{id}")]
+        public IActionResult GetAccountDetailByAccountId(Guid id)
         {
             var accountDetail = new AccountDetail();
             try
@@ -99,6 +99,7 @@ namespace WebAPI.Controllers
             try
             {
                 _accountDetailRepository.Add(accountDetail);
+                _accountDetailRepository.SaveChanges();
                 return new JsonResult(new
                 {
                     status = true,
@@ -123,12 +124,13 @@ namespace WebAPI.Controllers
         /// <param name="accountDetail"></param>
         /// <returns></returns>
         [HttpPatch]
-        [Route("UpdateaccountDetail")]
+        [Route("UpdateAccountDetail")]
         public IActionResult UpdateAccountDetail([FromBody] AccountDetail accountDetail)
         {
             try
             {
                 _accountDetailRepository.Update(accountDetail);
+                _accountDetailRepository.SaveChanges();
                 return new JsonResult(new
                 {
                     status = true,
@@ -159,6 +161,7 @@ namespace WebAPI.Controllers
             try
             {
                 _accountDetailRepository.Delete(id);
+                _accountDetailRepository.SaveChanges();
                 return new JsonResult(new
                 {
                     status = true,
@@ -175,7 +178,5 @@ namespace WebAPI.Controllers
             }
         }
         #endregion
-
-
     }
 }
