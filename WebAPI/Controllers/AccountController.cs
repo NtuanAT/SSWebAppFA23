@@ -50,8 +50,7 @@ namespace WebAPI.Controllers
 		#region DeactivateAccount
 		/// <summary>
 		/// Deactivate account
-		/// </summary>
-		/// <param name="id"></param>
+		/// </summary>S
 		/// <returns></returns>
 		[HttpPut]
 		[Route("DeactivateAccount/{id}")]
