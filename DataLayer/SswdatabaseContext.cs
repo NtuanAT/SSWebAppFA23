@@ -24,7 +24,7 @@ public partial class SswdatabaseContext : DbContext
 
 	public virtual DbSet<Image> Images { get; set; }
 
-	public virtual DbSet<OrderProduct> OderProducts { get; set; }
+	public virtual DbSet<OrderProduct> OrderProducts { get; set; }
 
     public virtual DbSet<Order> Orders { get; set; }
 

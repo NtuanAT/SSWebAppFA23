@@ -49,33 +49,43 @@ namespace WebAPI.Controllers
         [Authorize]
         public IActionResult GetAllOrder()
         {
-            var orderViews = new List<OrderViewModel>();
             try
             {
-                orderViews = _context.Orders
-                .Select(x => new OrderViewModel()
+                var orderEntities = _orderRepository.GetAll();
+                var orderViews = new List<OrderViewModel>();
+                foreach (var orderEntity in orderEntities)
                 {
-                    AccountId = x.AccountId,
-                    Id = x.Id,
-                    OrderDate = x.OrderDate,
-                    Status = x.Status,
-                    //AccountName = _context.Accounts.Where(y => y.Id == x.AccountId).Select(y => y.Username).FirstOrDefault(),
-                    Products = _context.OderProducts.Where(y => y.OrderId == x.Id)
-                    .Select(y => new OrderProductViewModel()
+                    var orderViewModel = new OrderViewModel
                     {
-                        ProductId = y.ProductId,
-                        Quantity = y.Quantity,
-                    }).ToList()
-                    .ToList(),
-                    Services= _context.OrderServices.Where(y => y.OrderId == x.Id)
-                    .Select(y => new OrderServiceViewModel()
-                    {
-                        ServiceId = y.ServiceId,
-                        Quantity = y.Quantity,
-                        Message = y.Message
-                    }).ToList()
-                    .ToList(),
-                }).ToList();
+                        Id = orderEntity.Id,
+                        AccountId = orderEntity.AccountId,
+                        OrderDate = orderEntity.OrderDate,
+                        Status = orderEntity.Status,
+                        Products = _orderProductRepository.GetList(y=> y.OrderId == orderEntity.Id)
+                            .Select(product => new OrderProductViewModel
+                            {
+                                ProductId = product.ProductId,
+                                Quantity = product.Quantity
+                            })
+                            .ToList(),
+                        Services = _orderServiceRepository.GetList(y => y.OrderId == orderEntity.Id)
+                            .Select(service => new OrderServiceViewModel
+                            {
+                                ServiceId = service.ServiceId,
+                                Quantity = service.Quantity,
+                                Message = service.Message
+                            })
+                            .ToList()
+                    };
+                
+                    orderViews.Add(orderViewModel);
+                }
+                return new JsonResult(new
+                {
+                    status = true,
+                    message = "Get all orders success",
+                    data = orderViews
+                });
 
             }
             catch (Exception ex)
@@ -86,12 +96,6 @@ namespace WebAPI.Controllers
                     message = ex.Message
                 });
             }
-            return new JsonResult(new
-            {
-                status = true,
-                message = "Get all orders success",
-                data = orderViews
-            });
         }
         #endregion
 
@@ -197,14 +201,14 @@ namespace WebAPI.Controllers
             var orderViews = new List<OrderViewModel>();
             try
             {
-                orderViews = _context.OderProducts
+                orderViews = _context.OrderProducts
                     .Select(op => new OrderViewModel()
                     {
                         AccountId = op.Order.AccountId,
                         Id = op.Order.Id,
                         OrderDate = op.Order.OrderDate,
                         Status = op.Order.Status,
-                        Products = _context.OderProducts
+                        Products = _context.OrderProducts
                             .Where(opp => opp.OrderId == op.Order.Id)
                             .Select(oss => new OrderProductViewModel()
                             {
