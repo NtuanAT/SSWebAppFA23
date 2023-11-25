@@ -170,6 +170,7 @@ namespace WebAPI.Controllers
                 .ToList()
                 }).ToList();
 
+
                 return new JsonResult(new
                 {
                     status = true,
@@ -198,26 +199,32 @@ namespace WebAPI.Controllers
         [Route("GetAllProductOrder")]
         public IActionResult GetAllProductOrder()
         {
-            var orderViews = new List<OrderViewModel>();
             try
             {
-                orderViews = _context.OderProducts
-                    .Select(op => new OrderViewModel()
-                    {
-                        AccountId = op.Order.AccountId,
-                        Id = op.Order.Id,
-                        OrderDate = op.Order.OrderDate,
-                        Status = op.Order.Status,
-                        Products = _context.OderProducts
-                            .Where(opp => opp.OrderId == op.Order.Id)
-                            .Select(oss => new OrderProductViewModel()
-                            {
-                                ProductId = oss.ProductId,
-                                Quantity = oss.Quantity,
-                            })
-                            .ToList(),
-                    })
-                    .ToList();
+                var orderProducts = _orderRepository.GetAll()
+                .Where(order => _orderProductRepository.GetList(op => op.OrderId == order.Id).Any())
+                .ToList();
+                var orderViews = orderProducts.Select(orderProduct => new OrderViewModel
+                {
+                    Id = orderProduct.Id,
+                    AccountId = orderProduct.AccountId,
+                    OrderDate = orderProduct.OrderDate,
+                    Status = orderProduct.Status,
+                    Products = _orderProductRepository.GetList(op => op.OrderId == orderProduct.Id)
+                .Select(oss => new OrderProductViewModel()
+                {
+                    ProductId = oss.ProductId,
+                    Quantity = oss.Quantity
+                })
+                .ToList()
+                }).ToList();
+
+                return new JsonResult(new
+                {
+                    status = true,
+                    message = "Get all product orders success",
+                    data = orderViews
+                });
             }
             catch (Exception ex)
             {
@@ -227,12 +234,6 @@ namespace WebAPI.Controllers
                     message = ex.Message
                 });
             }
-            return new JsonResult(new
-            {
-                status = true,
-                message = "Get all product orders success",
-                data = orderViews
-            });
         }
         #endregion
 
