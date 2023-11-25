@@ -16,6 +16,7 @@ public class Account
     public AccountRole Role { get; set; }
     [Required]
     public AccountStatus Status { get; set; }
+    public Guid? DetailId { get; set; }
 
     public virtual AccountDetail? AccountDetail { get; set; } 
 

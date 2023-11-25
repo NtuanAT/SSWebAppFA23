@@ -44,12 +44,12 @@ namespace DataLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Accounts");
+                    b.ToTable("Accounts", (string)null);
 
                     b.HasData(
                         new
                         {
-                            Id = new Guid("7cbddc11-8ada-4f77-a1c4-15a9b2cdd4e7"),
+                            Id = new Guid("d2376e25-52f2-431d-85ed-0d453f1e9570"),
                             Password = "123456",
                             Role = 1,
                             Status = 0,
@@ -57,7 +57,7 @@ namespace DataLayer.Migrations
                         },
                         new
                         {
-                            Id = new Guid("c0280d04-78fc-4494-b4fb-236bf19a9fb1"),
+                            Id = new Guid("1527e96c-5cfd-4883-a475-4feb357014e3"),
                             Password = "123456",
                             Role = 0,
                             Status = 0,
@@ -65,7 +65,7 @@ namespace DataLayer.Migrations
                         },
                         new
                         {
-                            Id = new Guid("24a8167b-d203-45ab-ac13-7d8dc20d218a"),
+                            Id = new Guid("4b224db4-473b-4740-9a16-38ae436dad82"),
                             Password = "123456",
                             Role = 2,
                             Status = 0,
@@ -103,7 +103,7 @@ namespace DataLayer.Migrations
                     b.HasIndex("AccountId")
                         .IsUnique();
 
-                    b.ToTable("AccountDetails");
+                    b.ToTable("AccountDetails", (string)null);
                 });
 
             modelBuilder.Entity("DataLayer.Entities.FeedBack", b =>
@@ -129,7 +129,7 @@ namespace DataLayer.Migrations
                     b.HasIndex("OrderId")
                         .IsUnique();
 
-                    b.ToTable("FeedBacks");
+                    b.ToTable("FeedBacks", (string)null);
                 });
 
             modelBuilder.Entity("DataLayer.Entities.Image", b =>
@@ -163,7 +163,7 @@ namespace DataLayer.Migrations
 
                     b.HasIndex("AccountId");
 
-                    b.ToTable("Images");
+                    b.ToTable("Images", (string)null);
                 });
 
             modelBuilder.Entity("DataLayer.Entities.Order", b =>
@@ -188,7 +188,7 @@ namespace DataLayer.Migrations
 
                     b.HasIndex("AccountId");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Orders", (string)null);
                 });
 
             modelBuilder.Entity("DataLayer.Entities.OrderProduct", b =>
@@ -206,7 +206,7 @@ namespace DataLayer.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("OderProducts");
+                    b.ToTable("OderProducts", (string)null);
                 });
 
             modelBuilder.Entity("DataLayer.Entities.OrderService", b =>
@@ -217,9 +217,6 @@ namespace DataLayer.Migrations
                     b.Property<Guid>("ServiceId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Message")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
@@ -227,7 +224,7 @@ namespace DataLayer.Migrations
 
                     b.HasIndex("ServiceId");
 
-                    b.ToTable("OrderServices");
+                    b.ToTable("OrderServices", (string)null);
                 });
 
             modelBuilder.Entity("DataLayer.Entities.Payment", b =>
@@ -250,7 +247,7 @@ namespace DataLayer.Migrations
 
                     b.HasKey("OrderId");
 
-                    b.ToTable("Payments");
+                    b.ToTable("Payments", (string)null);
                 });
 
             modelBuilder.Entity("DataLayer.Entities.Product", b =>
@@ -284,12 +281,12 @@ namespace DataLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
 
                     b.HasData(
                         new
                         {
-                            Id = new Guid("0a8efb32-d30f-43cb-88be-2e6f0c7364bf"),
+                            Id = new Guid("31b97292-19b4-48d9-aaf4-6f55d4ca2a30"),
                             Brand = "Nike",
                             Catagories = "Shoes",
                             Color = "Purple",
@@ -300,7 +297,7 @@ namespace DataLayer.Migrations
                         },
                         new
                         {
-                            Id = new Guid("c371d6e4-06a7-40ed-9dc4-d5f1cdd9ce4c"),
+                            Id = new Guid("a5165b79-b50b-4440-a1ab-cf8fa248efc4"),
                             Brand = "Converse",
                             Catagories = "Shoes",
                             Color = "Black",
@@ -311,7 +308,7 @@ namespace DataLayer.Migrations
                         },
                         new
                         {
-                            Id = new Guid("eff48829-57c8-470b-9f6e-ef7ed2891092"),
+                            Id = new Guid("62ff70e7-af58-47ee-b4a6-6c4cdf91f81a"),
                             Brand = "Autry",
                             Catagories = "Shoes",
                             Color = "Silver",
@@ -322,7 +319,7 @@ namespace DataLayer.Migrations
                         },
                         new
                         {
-                            Id = new Guid("33ec152d-d48d-4f1f-8982-97567a2c6f45"),
+                            Id = new Guid("6175e609-a360-44a6-ac91-5a0752737d03"),
                             Brand = "Adidas",
                             Catagories = "Shoes",
                             Color = "Purple",
@@ -333,7 +330,7 @@ namespace DataLayer.Migrations
                         },
                         new
                         {
-                            Id = new Guid("ff57f8c7-b7c6-4dbb-86f0-7f3d1e36f5d2"),
+                            Id = new Guid("46b1ec3e-65b1-40a1-bcd8-4fa79b80dd74"),
                             Brand = "Air Jordan",
                             Catagories = "Shoes",
                             Color = "Blue",
@@ -344,7 +341,7 @@ namespace DataLayer.Migrations
                         },
                         new
                         {
-                            Id = new Guid("66412cd7-d61d-4cf0-8a49-bb5f5d5ec5f7"),
+                            Id = new Guid("1883c618-b0d1-46aa-a27a-d891a6bba4de"),
                             Brand = "Air Jordan",
                             Catagories = "Shoes",
                             Color = "Blue",
@@ -355,7 +352,7 @@ namespace DataLayer.Migrations
                         },
                         new
                         {
-                            Id = new Guid("c79eb95e-485a-4139-bd22-157a7facd2e5"),
+                            Id = new Guid("1a2aac64-40c0-4bc6-950c-a8f21197a313"),
                             Brand = "Nike",
                             Catagories = "Shoes",
                             Color = "Red",
@@ -366,7 +363,7 @@ namespace DataLayer.Migrations
                         },
                         new
                         {
-                            Id = new Guid("19d4c64d-431b-462c-8015-9378504c6233"),
+                            Id = new Guid("68a4fdce-40fb-4c59-9c87-ac66466dd824"),
                             Brand = "Puma",
                             Catagories = "Shoes",
                             Color = "Purple",
@@ -377,7 +374,7 @@ namespace DataLayer.Migrations
                         },
                         new
                         {
-                            Id = new Guid("cc75bd69-8c51-4041-a6de-3c184605a76c"),
+                            Id = new Guid("2e42e077-1e74-4ea3-8320-e0a18900d8af"),
                             Brand = "Nike",
                             Catagories = "Shoes",
                             Color = "Purple",
@@ -388,7 +385,7 @@ namespace DataLayer.Migrations
                         },
                         new
                         {
-                            Id = new Guid("48d32d4f-6cec-430f-a293-ec87a4af00fa"),
+                            Id = new Guid("bbdb608a-ead9-48ba-913d-e2ce24b4d371"),
                             Brand = "Converse",
                             Catagories = "Shoes",
                             Color = "Black",
@@ -399,7 +396,7 @@ namespace DataLayer.Migrations
                         },
                         new
                         {
-                            Id = new Guid("64c6ef64-f052-4196-ac39-a9e224e69044"),
+                            Id = new Guid("40628a83-cd4c-4a75-8152-36c863005ce7"),
                             Brand = "Converse",
                             Catagories = "Shoes",
                             Color = "White",
@@ -425,24 +422,24 @@ namespace DataLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Services");
+                    b.ToTable("Services", (string)null);
 
                     b.HasData(
                         new
                         {
-                            Id = new Guid("207c5b14-28a3-4c82-906c-3fb51d9f2d5d"),
+                            Id = new Guid("7ff262de-d146-46f8-bc30-92bb2f4faa7c"),
                             Price = 10m,
                             Type = "Clean"
                         },
                         new
                         {
-                            Id = new Guid("4d0fcd67-cdc7-4e78-bc06-c4aab30ca996"),
+                            Id = new Guid("fc4a485e-2c43-4d0d-9395-8cb2b368fcde"),
                             Price = 20m,
                             Type = "Repair"
                         },
                         new
                         {
-                            Id = new Guid("5e6cd7b7-8991-4eae-82e9-349b6306f121"),
+                            Id = new Guid("c4b0323d-9241-4bf5-9ec4-89e88ff92fc0"),
                             Price = 30m,
                             Type = "Customize"
                         });
