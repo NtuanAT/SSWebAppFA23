@@ -89,7 +89,8 @@ namespace WebAPI.Controllers
 			var product = new Product();
 			try
 			{
-				product = _productRepository.Get(x => x.Id == id);
+				// Get product
+				product = _productRepository.Get(p => p.Id == id);
 				if (product == null)
 				{
 					return new JsonResult(new
@@ -98,6 +99,21 @@ namespace WebAPI.Controllers
 						message = "Product not found"
 					});
 				}
+
+				// Get in store product
+				var inStoreProduct = _inStoreProductRepository.GetList(x => x.ProductId == product.Id);
+				product.InStoreProducts = new List<InStoreProduct>();
+				foreach (var item in inStoreProduct)
+				{
+					product.InStoreProducts.Add(new InStoreProduct
+					{
+						Id = item.Id,
+						ProductId = item.ProductId,
+						Quantity = item.Quantity,
+						Size = item.Size,
+					});
+				}
+
 
 				return new JsonResult(new
 				{
