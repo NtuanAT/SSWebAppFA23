@@ -49,33 +49,43 @@ namespace WebAPI.Controllers
         [Authorize]
         public IActionResult GetAllOrder()
         {
-            var orderViews = new List<OrderViewModel>();
             try
             {
-                orderViews = _context.Orders
-                .Select(x => new OrderViewModel()
+                var orderEntities = _orderRepository.GetAll();
+                var orderViews = new List<OrderViewModel>();
+                foreach (var orderEntity in orderEntities)
                 {
-                    AccountId = x.AccountId,
-                    Id = x.Id,
-                    OrderDate = x.OrderDate,
-                    Status = x.Status,
-                    //AccountName = _context.Accounts.Where(y => y.Id == x.AccountId).Select(y => y.Username).FirstOrDefault(),
-                    Products = _context.OderProducts.Where(y => y.OrderId == x.Id)
-                    .Select(y => new OrderProductViewModel()
+                    var orderViewModel = new OrderViewModel
                     {
-                        ProductId = y.ProductId,
-                        Quantity = y.Quantity,
-                    }).ToList()
-                    .ToList(),
-                    Services= _context.OrderServices.Where(y => y.OrderId == x.Id)
-                    .Select(y => new OrderServiceViewModel()
-                    {
-                        ServiceId = y.ServiceId,
-                        Quantity = y.Quantity,
-                        Message = y.Message
-                    }).ToList()
-                    .ToList(),
-                }).ToList();
+                        Id = orderEntity.Id,
+                        AccountId = orderEntity.AccountId,
+                        OrderDate = orderEntity.OrderDate,
+                        Status = orderEntity.Status,
+                        Products = _orderProductRepository.GetList(y => y.OrderId == orderEntity.Id)
+                            .Select(product => new OrderProductViewModel
+                            {
+                                ProductId = product.ProductId,
+                                Quantity = product.Quantity
+                            })
+                            .ToList(),
+                        Services = _orderServiceRepository.GetList(y => y.OrderId == orderEntity.Id)
+                            .Select(service => new OrderServiceViewModel
+                            {
+                                ServiceId = service.ServiceId,
+                                Quantity = service.Quantity,
+                                Message = service.Message
+                            })
+                            .ToList()
+                    };
+
+                    orderViews.Add(orderViewModel);
+                }
+                return new JsonResult(new
+                {
+                    status = true,
+                    message = "Get all orders success",
+                    data = orderViews
+                });
 
             }
             catch (Exception ex)
@@ -86,12 +96,6 @@ namespace WebAPI.Controllers
                     message = ex.Message
                 });
             }
-            return new JsonResult(new
-            {
-                status = true,
-                message = "Get all orders success",
-                data = orderViews
-            });
         }
         #endregion
 
@@ -145,27 +149,34 @@ namespace WebAPI.Controllers
         [Route("GetAllServiceOrder")]
         public IActionResult GetAllServiceOrder()
         {
-            var orderViews = new List<OrderViewModel>();
             try
             {
-                orderViews = _context.OrderServices
-                    .Select(os => new OrderViewModel()
-                    {
-                        AccountId = os.Order.AccountId,
-                        Id = os.Order.Id,
-                        OrderDate = os.Order.OrderDate,
-                        Status = os.Order.Status,
-                        Services = _context.OrderServices
-                            .Where(oss => oss.OrderId == os.Order.Id)
-                            .Select(oss => new OrderServiceViewModel()
-                            {
-                                ServiceId = oss.ServiceId,
-                                Quantity = oss.Quantity,
-                                Message = oss.Message
-                            })
-                            .ToList(),
-                    })
-                    .ToList();
+                var orderServices = _orderRepository.GetAll()
+                .Where(order => _orderServiceRepository.GetList(oss => oss.OrderId == order.Id).Any())
+                .ToList();
+                var orderViews = orderServices.Select(orderService => new OrderViewModel
+                {
+                    Id = orderService.Id,
+                    AccountId = orderService.AccountId,
+                    OrderDate = orderService.OrderDate,
+                    Status = orderService.Status,
+                    Services = _orderServiceRepository.GetList(oss => oss.OrderId == orderService.Id)
+                .Select(oss => new OrderServiceViewModel()
+                {
+                    ServiceId = oss.ServiceId,
+                    Message = oss.Message,
+                    Quantity = oss.Quantity
+                })
+                .ToList()
+                }).ToList();
+
+
+                return new JsonResult(new
+                {
+                    status = true,
+                    message = "Get all service orders success",
+                    data = orderViews
+                });
             }
             catch (Exception ex)
             {
@@ -175,12 +186,6 @@ namespace WebAPI.Controllers
                     message = ex.Message
                 });
             }
-            return new JsonResult(new
-            {
-                status = true,
-                message = "Get all service orders success",
-                data = orderViews
-            });
         }
         #endregion
 
@@ -194,26 +199,32 @@ namespace WebAPI.Controllers
         [Route("GetAllProductOrder")]
         public IActionResult GetAllProductOrder()
         {
-            var orderViews = new List<OrderViewModel>();
             try
             {
-                orderViews = _context.OderProducts
-                    .Select(op => new OrderViewModel()
-                    {
-                        AccountId = op.Order.AccountId,
-                        Id = op.Order.Id,
-                        OrderDate = op.Order.OrderDate,
-                        Status = op.Order.Status,
-                        Products = _context.OderProducts
-                            .Where(opp => opp.OrderId == op.Order.Id)
-                            .Select(oss => new OrderProductViewModel()
-                            {
-                                ProductId = oss.ProductId,
-                                Quantity = oss.Quantity,
-                            })
-                            .ToList(),
-                    })
-                    .ToList();
+                var orderProducts = _orderRepository.GetAll()
+                .Where(order => _orderProductRepository.GetList(op => op.OrderId == order.Id).Any())
+                .ToList();
+                var orderViews = orderProducts.Select(orderProduct => new OrderViewModel
+                {
+                    Id = orderProduct.Id,
+                    AccountId = orderProduct.AccountId,
+                    OrderDate = orderProduct.OrderDate,
+                    Status = orderProduct.Status,
+                    Products = _orderProductRepository.GetList(op => op.OrderId == orderProduct.Id)
+                .Select(oss => new OrderProductViewModel()
+                {
+                    ProductId = oss.ProductId,
+                    Quantity = oss.Quantity
+                })
+                .ToList()
+                }).ToList();
+
+                return new JsonResult(new
+                {
+                    status = true,
+                    message = "Get all product orders success",
+                    data = orderViews
+                });
             }
             catch (Exception ex)
             {
@@ -223,12 +234,6 @@ namespace WebAPI.Controllers
                     message = ex.Message
                 });
             }
-            return new JsonResult(new
-            {
-                status = true,
-                message = "Get all product orders success",
-                data = orderViews
-            });
         }
         #endregion
 

@@ -28,6 +28,9 @@ namespace DataLayer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("DetailId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -49,7 +52,7 @@ namespace DataLayer.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("4829b40c-2e09-4ec5-b3db-e919b8884255"),
+                            Id = new Guid("bdcc8ef2-f6b4-42e9-8302-4d3b4bbd582c"),
                             Password = "123456",
                             Role = 1,
                             Status = 0,
@@ -57,7 +60,7 @@ namespace DataLayer.Migrations
                         },
                         new
                         {
-                            Id = new Guid("56d28530-dace-436b-8fe4-c78f19398a6c"),
+                            Id = new Guid("5b939815-302a-4da3-826b-6fb9d5cb2f7e"),
                             Password = "123456",
                             Role = 0,
                             Status = 0,
@@ -65,7 +68,7 @@ namespace DataLayer.Migrations
                         },
                         new
                         {
-                            Id = new Guid("bf82dbe4-d831-4acf-8239-8be7c5c7242d"),
+                            Id = new Guid("07a0fc21-f6bd-4501-8eb3-67ab79dde6ae"),
                             Password = "123456",
                             Role = 2,
                             Status = 0,
@@ -289,7 +292,7 @@ namespace DataLayer.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("52992dd7-feed-4964-a374-47f30ff18bec"),
+                            Id = new Guid("cc5defbc-65df-4ec2-9d23-1566a8f325b0"),
                             Brand = "Nike",
                             Catagories = "Shoes",
                             Color = "Purple",
@@ -300,7 +303,7 @@ namespace DataLayer.Migrations
                         },
                         new
                         {
-                            Id = new Guid("023e5750-3db4-4f05-8b8e-cc64b4af6e91"),
+                            Id = new Guid("b8115ff4-4e79-48a6-aae9-7e465c4c14ce"),
                             Brand = "Converse",
                             Catagories = "Shoes",
                             Color = "Black",
@@ -311,7 +314,7 @@ namespace DataLayer.Migrations
                         },
                         new
                         {
-                            Id = new Guid("876d6729-d111-4ac0-b0eb-47dffed05f60"),
+                            Id = new Guid("9d305c18-98ae-45c3-99f5-26245d8aea7b"),
                             Brand = "Autry",
                             Catagories = "Shoes",
                             Color = "Silver",
@@ -322,7 +325,7 @@ namespace DataLayer.Migrations
                         },
                         new
                         {
-                            Id = new Guid("aa922975-bbd3-493c-bebc-cce4bd0a99a4"),
+                            Id = new Guid("52190f3e-9b17-4c86-8357-bccc37e4ea1a"),
                             Brand = "Adidas",
                             Catagories = "Shoes",
                             Color = "Purple",
@@ -333,7 +336,7 @@ namespace DataLayer.Migrations
                         },
                         new
                         {
-                            Id = new Guid("35c276ea-284b-4a6b-8716-2c9cd0f8b4ad"),
+                            Id = new Guid("c64ad7fd-a3ed-4ed0-a129-c5d54860f553"),
                             Brand = "Air Jordan",
                             Catagories = "Shoes",
                             Color = "Blue",
@@ -344,7 +347,7 @@ namespace DataLayer.Migrations
                         },
                         new
                         {
-                            Id = new Guid("3517934e-4ac2-446a-8953-155b5b204596"),
+                            Id = new Guid("13d92877-feda-4dfa-9138-3939c5b7f99a"),
                             Brand = "Air Jordan",
                             Catagories = "Shoes",
                             Color = "Blue",
@@ -355,7 +358,7 @@ namespace DataLayer.Migrations
                         },
                         new
                         {
-                            Id = new Guid("c5f92849-5360-4526-a3cf-dd33144a0964"),
+                            Id = new Guid("e45ad433-d44e-4430-a388-3e062f67a54b"),
                             Brand = "Nike",
                             Catagories = "Shoes",
                             Color = "Red",
@@ -366,7 +369,7 @@ namespace DataLayer.Migrations
                         },
                         new
                         {
-                            Id = new Guid("f6edd556-1196-47ab-a607-f5a5f4a05300"),
+                            Id = new Guid("b234aca6-40b1-42e9-9c57-8b1a6c30d620"),
                             Brand = "Puma",
                             Catagories = "Shoes",
                             Color = "Purple",
@@ -377,7 +380,7 @@ namespace DataLayer.Migrations
                         },
                         new
                         {
-                            Id = new Guid("ab0ed005-c854-473b-9a19-dc50618908b5"),
+                            Id = new Guid("9d7bb671-cf9a-4b36-b9e2-4cefeda3a1d9"),
                             Brand = "Nike",
                             Catagories = "Shoes",
                             Color = "Purple",
@@ -388,7 +391,7 @@ namespace DataLayer.Migrations
                         },
                         new
                         {
-                            Id = new Guid("2a1695f8-9444-4515-bff8-511cfc395df1"),
+                            Id = new Guid("b99cd9da-c037-4739-b9f6-e8e04a9c400f"),
                             Brand = "Converse",
                             Catagories = "Shoes",
                             Color = "Black",
@@ -399,7 +402,7 @@ namespace DataLayer.Migrations
                         },
                         new
                         {
-                            Id = new Guid("8cf2c47f-d7ba-4515-85c4-188b2c985f83"),
+                            Id = new Guid("4e902198-21fb-4e5c-8484-7360fcafda8b"),
                             Brand = "Converse",
                             Catagories = "Shoes",
                             Color = "White",
@@ -430,19 +433,19 @@ namespace DataLayer.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("8214a5df-37ba-4640-a251-6ef7026a57f3"),
+                            Id = new Guid("60c24cc2-75b8-4fee-bfc6-8f84c9e1595e"),
                             Price = 10m,
                             Type = "Clean"
                         },
                         new
                         {
-                            Id = new Guid("4c35c2c3-5716-4d76-b219-e9b3076b9525"),
+                            Id = new Guid("ead83624-297c-4644-bb1c-c5be04ff343c"),
                             Price = 20m,
                             Type = "Repair"
                         },
                         new
                         {
-                            Id = new Guid("084072f5-a298-401b-8487-cfc388c3cb7e"),
+                            Id = new Guid("30170c96-7a43-49e1-b839-3a7f50b00d97"),
                             Price = 30m,
                             Type = "Customize"
                         });

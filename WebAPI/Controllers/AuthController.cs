@@ -113,6 +113,7 @@ namespace WebAPI.Controllers
 				new Claim(ClaimTypes.Name, account.Id.ToString()),
 				new Claim(ClaimTypes.Role, account.Role.ToString()),
 				new Claim("AccountID", account.Id.ToString()),
+				new Claim("DetailId", account.DetailId.ToString()),
 				new Claim("Role", account.Role.ToString()),
 			};
 
