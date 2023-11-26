@@ -341,8 +341,8 @@ namespace WebAPI.Controllers
 				var orders = _orderRepository.GetAll()
 				.Where(order => _orderProductRepository.GetList(op => op.OrderId == order.Id).Any())
 				.ToList();
-
-				foreach (var order in orders)
+                var orderViewModels = new List<OrderViewModel>();
+                foreach (var order in orders)
 				{
 					var orderViewModel = new OrderViewModel
 					{
@@ -354,46 +354,54 @@ namespace WebAPI.Controllers
 
 					// Get account
 					var account = _accountRepository.Get(x => x.Id == order.AccountId);
-					orderViewModel.Account = new AccountViewModel
+					if (account != null)
 					{
-						Id = account.Id,
-						Username = account.Username,
-						Password = account.Password,
-						DetailId = account.DetailId,
-						Status = account.Status,
-						Role = account.Role
-					};
+                        orderViewModel.Account = new AccountViewModel
+                        {
+                            Id = account.Id,
+                            Username = account.Username,
+                            Password = account.Password,
+                            DetailId = account.DetailId,
+                            Status = account.Status,
+                            Role = account.Role
+                        };
+                    }
+                        
 
 					// Get products
 					var orderProductsList = _orderProductRepository.GetList(x => x.OrderId == order.Id);
-					orderViewModel.Products = new List<OrderProductViewModel>();
-					foreach (var orderProduct in orderProductsList)
+					if (orderProductsList != null)
 					{
-						var product = _productRepository.Get(x => x.Id == orderProduct.ProductId);
-						orderViewModel.Products.Add(new OrderProductViewModel
-						{
-							OrderId = orderProduct.OrderId,
-							ProductId = orderProduct.ProductId,
-							Quantity = orderProduct.Quantity,
-							Product = new ProductViewModel
-							{
-								Id = product.Id,
-								Name = product.Name,
-								Brand = product.Brand,
-								Color = product.Color,
-								Price = product.Price,
-								Catagories = product.Catagories,
-								PictureLink = product.PictureLink
-							}
-						});
-					}
+                        orderViewModel.Products = new List<OrderProductViewModel>();
+                        foreach (var orderProduct in orderProductsList)
+                        {
+                            var product = _productRepository.Get(x => x.Id == orderProduct.ProductId);
+                            orderViewModel.Products.Add(new OrderProductViewModel
+                            {
+                                OrderId = orderProduct.OrderId,
+                                ProductId = orderProduct.ProductId,
+                                Quantity = orderProduct.Quantity,
+                                Product = new ProductViewModel
+                                {
+                                    Id = product.Id,
+                                    Name = product.Name,
+                                    Brand = product.Brand,
+                                    Color = product.Color,
+                                    Price = product.Price,
+                                    Catagories = product.Catagories,
+                                    PictureLink = product.PictureLink
+                                }
+                            });
+                        }
+                    }
+					orderViewModels.Add(orderViewModel);
 				}
 
 				return new JsonResult(new
 				{
 					status = true,
 					message = "Get all product orders success",
-					data = orders
+					data = orderViewModels
 				});
 			}
 			catch (Exception ex)
