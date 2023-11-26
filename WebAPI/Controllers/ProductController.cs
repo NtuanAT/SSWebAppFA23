@@ -39,7 +39,6 @@ namespace WebAPI.Controllers
 					productViewModel.Color = product.Color;
 					productViewModel.Price = product.Price;
 					productViewModel.Catagories = product.Catagories;
-					productViewModel.Size = product.Size;
 					productViewModel.PictureLink = product.PictureLink;
 					products.Add(productViewModel);
 
@@ -123,7 +122,6 @@ namespace WebAPI.Controllers
 					Color = productViewModel.Color,
 					Price = productViewModel.Price,
 					Catagories = productViewModel.Catagories,
-					Size = productViewModel.Size,
 					PictureLink = productViewModel.PictureLink,
 				};
 				_productRepository.Add(product);

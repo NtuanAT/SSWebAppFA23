@@ -16,6 +16,7 @@ public class Order
     public decimal Total { get; set; }
     [Required]
     public OrderStatus Status { get; set; }
+    public Guid? FeedBackId { get; set; }
 
     public virtual Account? Account { get; set; } 
 

@@ -19,7 +19,6 @@ namespace WebAPI.Controllers
         private readonly OrderServiceRepository _orderServiceRepository;
         private readonly ServiceRepository _serviceRepository;
         private readonly ProductRepository _productRepository;
-        private readonly SswdatabaseContext _context;
 
         public OrderController(OrderRepository orderRepository,
             AccountRepository accountRepository,
@@ -36,7 +35,6 @@ namespace WebAPI.Controllers
             _orderServiceRepository = orderServiceRepository;
             _serviceRepository = serviceRepository;
             _productRepository = productRepository;
-            _context = context;
         }
 
         #region Get All Order
