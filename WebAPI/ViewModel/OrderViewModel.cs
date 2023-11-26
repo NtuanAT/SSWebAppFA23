@@ -26,6 +26,7 @@ namespace WebAPI.ViewModel
         public Guid? OrderId { get; set; }
         public Guid? ProductId { get; set; }
         public int Quantity { get; set; }
+        public ProductViewModel? Product { get; set; }
     }
 
     public class OrderServiceViewModel
@@ -34,6 +35,7 @@ namespace WebAPI.ViewModel
         public Guid ServiceId { get; set; }
         public int Quantity { get; set; }
         public string? Message { get; set; }
+        public ServiceViewModel? Service { get; set; }
     }
 
 }
