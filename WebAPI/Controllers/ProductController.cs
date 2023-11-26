@@ -150,29 +150,36 @@ namespace WebAPI.Controllers
 		/// <param name="product"></param>
 		/// <returns></returns>
 		[HttpPatch]
-		[Route("UpdateProduct")]
+		[Route("UpdateProduct/{id}")]
 		public IActionResult UpdateProduct([FromBody] ProductViewModel productViewModel)
 		{
 			try
 			{
-				var product = new Product
+				var existingProduct = _productRepository.Get(p => p.Id == productViewModel.Id);
+				if (existingProduct == null) 
 				{
-					Id = (Guid)productViewModel.Id,
-					Name = productViewModel.Name,
-					Brand = productViewModel.Brand,
-					Color = productViewModel.Color,
-					Price = productViewModel.Price,
-					Catagories = productViewModel.Catagories,
-					PictureLink = productViewModel.PictureLink,
-				};
-				_productRepository.Update(product);
+                    return new JsonResult(new
+                    {
+                        status = false,
+                        message = "Product not found"
+                    });
+                }
+				existingProduct.Name = productViewModel.Name;
+				existingProduct.Brand = productViewModel.Brand;
+				existingProduct.Color = productViewModel.Color;
+				existingProduct.Price = productViewModel.Price;
+				existingProduct.Catagories = productViewModel.Catagories;
+				existingProduct.Size = productViewModel.Size;
+				existingProduct.PictureLink	= productViewModel.PictureLink;
+
+				_productRepository.Update(existingProduct);
 				_productRepository.SaveChanges();
-				return new JsonResult(new
-				{
-					status = true,
-					message = "Update product success"
-				});
-			}
+                return new JsonResult(new
+                {
+                    status = true,
+                    message = "Update product success"
+                });
+            }
 			catch (Exception ex)
 			{
 				return new JsonResult(new
