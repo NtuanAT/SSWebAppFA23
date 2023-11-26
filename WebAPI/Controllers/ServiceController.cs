@@ -144,19 +144,27 @@ namespace WebAPI.Controllers
         /// <param name="service"></param>
         /// <returns></returns>
         [HttpPatch]
-        [Route("UpdateService")]
+        [Route("UpdateService/{id}")]
         public IActionResult UpdateService([FromBody] ServiceViewModel serviceViewModel)
         {
             try
             {
-                var service = new Service
+                var existingService = _serviceRepository.Get(s=> s.Id == serviceViewModel.Id);
+                if (existingService == null)
                 {
-                    Id = (Guid)serviceViewModel.Id,
-                    Price = serviceViewModel.Price,
-                    Type = serviceViewModel.Type,
-                };
-                _serviceRepository.Update(service);
+                    return new JsonResult(new
+                    {
+                        status = false,
+                        message = "Service not found"
+                    });
+                }
+
+                existingService.Price = serviceViewModel.Price;
+                existingService.Type = serviceViewModel.Type;
+
+                _serviceRepository.Update(existingService);
                 _serviceRepository.SaveChanges();
+
                 return new JsonResult(new
                 {
                     status = true,
