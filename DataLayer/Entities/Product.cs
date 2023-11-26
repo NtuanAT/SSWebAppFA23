@@ -18,9 +18,10 @@ public class Product
     public decimal Price { get; set; }
 
     public string? Catagories { get; set; }
-    [Required]
-    public double Size { get; set; }
 
     public string? PictureLink { get; set; }
-    public ICollection<OrderProduct>? Orders { get; set; }
+
+    public virtual ICollection<OrderProduct>? Orders { get; set; }
+
+    public virtual ICollection<InStoreProduct>? InStoreProducts { get; set; }
 }
