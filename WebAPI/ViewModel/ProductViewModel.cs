@@ -12,9 +12,9 @@ namespace WebAPI.ViewModel
         public decimal Price { get; set; }
 
         public string? Catagories { get; set; }
-        public double Size { get; set; }
 
         public string? PictureLink { get; set; }
         public ICollection<OrderProductViewModel>? Orders { get; set; }
+        public ICollection<InStoreProductViewModel>? InStoreProducts { get; set; }
     }
 }

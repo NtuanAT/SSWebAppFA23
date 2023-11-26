@@ -10,9 +10,11 @@ namespace WebAPI.Controllers
 	public class ProductController : Controller
 	{
 		private readonly ProductRepository _productRepository;
-		public ProductController(ProductRepository productRepository)
+		private readonly InStoreProductRepository _inStoreProductRepository;
+		public ProductController(ProductRepository productRepository, InStoreProductRepository inStoreProductRepository)
 		{
 			_productRepository = productRepository;
+			_inStoreProductRepository = inStoreProductRepository;
 		}
 
 		#region Get All Product
@@ -40,8 +42,20 @@ namespace WebAPI.Controllers
 					productViewModel.Price = product.Price;
 					productViewModel.Catagories = product.Catagories;
 					productViewModel.PictureLink = product.PictureLink;
-					products.Add(productViewModel);
 
+					var inStoreProduct = _inStoreProductRepository.GetList(x => x.ProductId == product.Id);
+					productViewModel.InStoreProducts = new List<InStoreProductViewModel>();
+					foreach (var item in inStoreProduct)
+					{
+						productViewModel.InStoreProducts.Add(new InStoreProductViewModel
+						{
+							Id = item.Id,
+							ProductId = item.ProductId,
+							Quantity = item.Quantity,
+							Size = item.Size,
+						});
+					}
+					products.Add(productViewModel);
 				}
 
 				return new JsonResult(new
@@ -124,7 +138,19 @@ namespace WebAPI.Controllers
 					Catagories = productViewModel.Catagories,
 					PictureLink = productViewModel.PictureLink,
 				};
-				_productRepository.Add(product);
+				var addedProduct = _productRepository.Add(product);
+
+				// Add in store product
+				foreach (var item in productViewModel.InStoreProducts)
+				{
+					var inStoreProduct = new InStoreProduct
+					{
+						ProductId = addedProduct.Id,
+						Quantity = item.Quantity,
+						Size = item.Size,
+					};
+					_inStoreProductRepository.Add(inStoreProduct);
+				}
 				_productRepository.SaveChanges();
 				return new JsonResult(new
 				{
@@ -169,9 +195,7 @@ namespace WebAPI.Controllers
 				existingProduct.Color = productViewModel.Color;
 				existingProduct.Price = productViewModel.Price;
 				existingProduct.Catagories = productViewModel.Catagories;
-				existingProduct.Size = productViewModel.Size;
 				existingProduct.PictureLink	= productViewModel.PictureLink;
-
 				_productRepository.Update(existingProduct);
 				_productRepository.SaveChanges();
                 return new JsonResult(new

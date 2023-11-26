@@ -74,6 +74,7 @@ namespace WebAPI
 			builder.Services.AddScoped(typeof(GenericRepository<>));
 			builder.Services.AddScoped<AccountRepository>();
 			builder.Services.AddScoped<ProductRepository>();
+			builder.Services.AddScoped<InStoreProductRepository>();
 			builder.Services.AddScoped<ServiceRepository>();
 			builder.Services.AddScoped<OrderRepository>();
 			builder.Services.AddScoped<ImageRepository>();
