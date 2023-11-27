@@ -11,6 +11,7 @@ public class OrderProduct
     [Key]
     public Guid ProductId { get; set; }
 
+    public int Size { get; set; }
     public int Quantity {  get; set; }
     public virtual Order? Order { get; set; }
 

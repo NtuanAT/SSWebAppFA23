@@ -80,6 +80,7 @@ namespace WebAPI
 			builder.Services.AddScoped<ImageRepository>();
 			builder.Services.AddScoped<AccountDetailRepository>();
 			builder.Services.AddScoped<PaymentRepository>();
+			builder.Services.AddScoped<FeedbackRepository>();
 			builder.Services.AddScoped<OrderServiceRepository>();
 			builder.Services.AddScoped<OrderProductRepository>();
 

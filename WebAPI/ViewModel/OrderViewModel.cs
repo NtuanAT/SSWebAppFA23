@@ -19,12 +19,17 @@ namespace WebAPI.ViewModel
 
         public ICollection<OrderServiceViewModel>? Services { get; set; }
 
+        public PaymentViewModel? Payment { get; set; }
+
+        public FeedbackViewModel? Feedback { get; set; }
+
     }
 
     public class OrderProductViewModel
     {
         public Guid? OrderId { get; set; }
         public Guid? ProductId { get; set; }
+        public int Size { get; set; }
         public int Quantity { get; set; }
         public ProductViewModel? Product { get; set; }
     }
