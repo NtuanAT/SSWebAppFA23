@@ -774,6 +774,7 @@ namespace WebAPI.Controllers
 						OrderId = orderProduct.OrderId,
 						ProductId = orderProduct.ProductId,
 						Quantity = orderProduct.Quantity,
+						Size = orderProduct.Size,
 						Product = new Product
 						{
 							Id = product.Id,
@@ -870,29 +871,38 @@ namespace WebAPI.Controllers
 						});
 					}
 
-					// Check if order has been processed
-					if (order.Status != OrderStatus.Processing)
+					// Check if order has been processed or delivering
+					if (order.Status != OrderStatus.Processing && order.Status != OrderStatus.Delivering)
 					{
 						return new JsonResult(new
 						{
 							status = false,
-							message = "Order has not been processed"
+							message = "Order has not been processed or delivering"
 						});
 					}
 
-					// Update in store product quantity
-					foreach (var orderProduct in order.Products)
-					{
-						var inStoreProduct = _inStoreProductRepository.Get(x => x.ProductId == orderProduct.ProductId && x.Size == orderProduct.Size);
-						if (inStoreProduct != null)
-						{
-							inStoreProduct.Quantity -= orderProduct.Quantity;
-							_inStoreProductRepository.Update(inStoreProduct);
-						}
-					}
+					//// Update in store product quantity
+					//foreach (var orderProduct in order.Products)
+					//{
+					//	var inStoreProduct = _inStoreProductRepository.Get(x => x.ProductId == orderProduct.ProductId && x.Size == orderProduct.Size);
+					//	if (inStoreProduct != null)
+					//	{
+					//		inStoreProduct.Quantity -= orderProduct.Quantity;
+					//		if (inStoreProduct.Quantity < 0)
+					//		{
+					//			return new JsonResult(new
+					//			{
+					//				status = false,
+					//				message = "Not enough product in store"
+					//			});
+					//		}
+					//		_inStoreProductRepository.Update(inStoreProduct);
+					//	}
+					//}
 				}
 				order.Status = (OrderStatus)parsedStatus;
 
+				_orderRepository.ClearTrackers();
 				_orderRepository.Update(order);
 
 				

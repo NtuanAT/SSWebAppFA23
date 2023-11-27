@@ -60,7 +60,10 @@ namespace DataLayer.Repositories
 			_context.SaveChanges();
 		}
 
-
+		public void ClearTrackers()
+		{
+			_context.ChangeTracker.Clear();
+		}
 		public int SaveChanges()
 		{
 			return _context.SaveChanges();
