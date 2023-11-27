@@ -439,11 +439,80 @@ namespace WebAPI.Controllers
 					});
 				}
 
+				var result = new List<OrderViewModel>();
+				foreach(var order in orders)
+				{
+					// Get account
+					var account = _accountRepository.Get(x => x.Id == order.AccountId);
+					var orderViewModel = new OrderViewModel
+					{
+						Id = order.Id,
+						AccountId = order.AccountId,
+						OrderDate = order.OrderDate,
+						Status = order.Status,
+						Account = new AccountViewModel
+						{
+							Id = account.Id,
+							Username = account.Username,
+							Password = account.Password,
+							DetailId = account.DetailId,
+							Status = account.Status,
+							Role = account.Role
+						}
+					};
+
+					// Get products
+					var orderProducts = _orderProductRepository.GetList(x => x.OrderId == order.Id);
+					orderViewModel.Products = new List<OrderProductViewModel>();
+					foreach (var orderProduct in orderProducts)
+					{
+						var product = _productRepository.Get(x => x.Id == orderProduct.ProductId);
+						orderViewModel.Products.Add(new OrderProductViewModel
+						{
+							OrderId = orderProduct.OrderId,
+							ProductId = orderProduct.ProductId,
+							Quantity = orderProduct.Quantity,
+							Product = new ProductViewModel
+							{
+								Id = product.Id,
+								Name = product.Name,
+								Brand = product.Brand,
+								Color = product.Color,
+								Price = product.Price,
+								Catagories = product.Catagories,
+								PictureLink = product.PictureLink
+							}
+						});
+					}
+
+					// Get services
+					var orderServices = _orderServiceRepository.GetList(x => x.OrderId == order.Id);
+					orderViewModel.Services = new List<OrderServiceViewModel>();
+					foreach (var orderService in orderServices)
+					{
+						var service = _serviceRepository.Get(x => x.Id == orderService.ServiceId);
+						orderViewModel.Services.Add(new OrderServiceViewModel
+						{
+							OrderId = orderService.OrderId,
+							ServiceId = orderService.ServiceId,
+							Quantity = orderService.Quantity,
+							Message = orderService.Message,
+							Service = new ServiceViewModel
+							{
+								Id = service.Id,
+								Price = service.Price,
+								Type = service.Type,
+							}
+						});
+					}
+					result.Add(orderViewModel);
+				}
+
 				return new JsonResult(new
 				{
 					status = true,
 					message = "Get orders by AccountID success",
-					data = orders
+					data = result
 				});
 			}
 			catch (Exception ex)
